@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="patternfull">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{5} - %msg%n
+        </Property>
+        <Property name="patternshort">
+            %d{HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n
+        </Property>
+    </Properties>
+    <Appenders>
+        <File name="TxtFile" fileName="logs/applicationLog.log" bufferedIO="true">
+            <PatternLayout pattern="${patternfull}"/>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${patternshort}"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="all">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="by.training.finalproject.controller.command.impl.AddComment" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToAdPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToHomePage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToSignUpPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.SignIn" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.SignUp" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.LikeAd" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToAddAdPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="main.Main" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+    </Loggers>
+</Configuration>
