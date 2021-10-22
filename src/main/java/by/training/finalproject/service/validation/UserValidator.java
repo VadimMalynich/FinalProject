@@ -1,5 +1,8 @@
 package by.training.finalproject.service.validation;
 
+/**
+ * Class for validate user data before add in database
+ */
 public class UserValidator {
     private static final String EMPTY_STRING = "";
     private static final String LOGIN_REGEX = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*[0-9a-zA-Z]\\.)+[a-zA-Z]{2,9})$";

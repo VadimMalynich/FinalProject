@@ -1,8 +1,9 @@
 package by.training.finalproject.controller.command.impl;
 
-import by.training.finalproject.bean.ClothesType;
+import by.training.finalproject.bean.AdInfo;
+import by.training.finalproject.bean.User;
 import by.training.finalproject.controller.command.Command;
-import by.training.finalproject.service.ClothesTypeService;
+import by.training.finalproject.service.AdInfoService;
 import by.training.finalproject.service.ServiceException;
 import by.training.finalproject.service.ServiceProvider;
 import org.apache.logging.log4j.LogManager;
@@ -17,32 +18,30 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class GoToAddAdPage implements Command {
-    private static final Logger userLogger = LogManager.getLogger(GoToAddAdPage.class);
+public class GoToUserProfilePage implements Command {
+    private static final Logger userLogger = LogManager.getLogger(GoToUserProfilePage.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.setAttribute("page", "Controller?command=go_to_add_ad_page");
+        session.setAttribute("page", "Controller?command=go_to_user_profile_page");
 
         if (request.getParameter("message") != null) {
             request.setAttribute("message", request.getParameter("message"));
         }
 
+        User user = (User) session.getAttribute("user");
         ServiceProvider provider = ServiceProvider.getInstance();
-        ClothesTypeService clothesTypeService = provider.getClothesTypeService();
+        AdInfoService adsInfoService = provider.getAdInfoService();
+
         try {
-            List<ClothesType> clothesTypeList = clothesTypeService.getAll();
-            if (clothesTypeList == null) {
-                response.sendRedirect("Controller?command=go_to_home_page&message=message.error.clothesTypes");
-            } else {
-                session.setAttribute("clothesTypes", clothesTypeList);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/addAdPage.jsp");
-                requestDispatcher.forward(request, response);
-            }
+            List<AdInfo> adsInfoProfileList = adsInfoService.getUserAds(user.getId());
+            session.setAttribute("userAdsProfileList", adsInfoProfileList);
         } catch (ServiceException e) {
             userLogger.error(e);
-            response.sendRedirect("Controller?command=go_to_home_page&message=message.error.server");
         }
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userProfile.jsp");
+        requestDispatcher.forward(request, response);
     }
 }

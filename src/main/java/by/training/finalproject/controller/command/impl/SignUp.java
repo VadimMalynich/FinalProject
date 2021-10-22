@@ -12,13 +12,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 public class SignUp implements Command {
     private static final Logger userLogger = LogManager.getLogger(SignUp.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("citiesList");
         String login = request.getParameter("signUpLogin");
@@ -36,9 +37,8 @@ public class SignUp implements Command {
 
         try {
             userService.registration(user, confirmPassword, messengers);
-
-            session.setAttribute("reg", true);
-            response.sendRedirect("Controller?command=go_to_home_page");
+            session.removeAttribute("citiesList");
+            response.sendRedirect("Controller?command=go_to_home_page&message=message.signUp.complete");
         } catch (ServiceException e) {
             userLogger.info(e);
             response.sendRedirect("Controller?command=go_to_sign_up_page&message=message.error.signUp");

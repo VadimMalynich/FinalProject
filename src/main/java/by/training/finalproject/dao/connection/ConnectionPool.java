@@ -14,16 +14,16 @@ import by.training.finalproject.dao.exception.ConnectionPoolException;
 public final class ConnectionPool {
     private static final ReentrantLock LOCKER = new ReentrantLock();
 
-    private String driverName;
-    private String url;
-    private String user;
-    private String password;
-    private int maxSize;
+    private final String driverName;
+    private final String url;
+    private final String user;
+    private final String password;
+    private final int maxSize;
 
     private BlockingQueue<PooledConnection> freeConnections = new LinkedBlockingQueue<>();
     private Set<PooledConnection> usedConnections = new ConcurrentSkipListSet<>();
 
-    private static ConnectionPool instance = new ConnectionPool();
+    private static final ConnectionPool instance = new ConnectionPool();
 
     public static ConnectionPool getInstance() {
         return instance;

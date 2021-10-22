@@ -40,14 +40,17 @@
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="langs.labels" var="loc"/>
+
     <fmt:message bundle="${loc}" key="signIn.button" var="signIn"/>
     <fmt:message bundle="${loc}" key="signUp.button" var="signUp"/>
     <fmt:message bundle="${loc}" key="add.ad.button" var="addButton"/>
     <fmt:message bundle="${loc}" key="logout.button" var="logout"/>
     <fmt:message bundle="${loc}" key="profile.button" var="profile"/>
+    <fmt:message bundle="${loc}" key="assortment.button" var="assortment"/>
+    <fmt:message bundle="${loc}" key="users.button" var="usersButton"/>
     <fmt:message bundle="${loc}" key="home.button" var="home"/>
     <fmt:message bundle="${loc}" key="comment.button" var="commentButton"/>
-    <fmt:message bundle="${loc}" key="comment.input.placeholder" var="commentsPlaceholder"/>
+
     <fmt:message bundle="${loc}" key="label.noComments" var="noCommentsLabel"/>
     <fmt:message bundle="${loc}" key="label.clothesType" var="typeLabel"/>
     <fmt:message bundle="${loc}" key="label.material" var="materialLabel"/>
@@ -65,8 +68,11 @@
     <fmt:message bundle="${loc}" key="label.sex.woman" var="sexWoman"/>
     <fmt:message bundle="${loc}" key="label.sex.unisex" var="sexUnisex"/>
     <fmt:message bundle="${loc}" key="label.sex.child" var="sexChild"/>
-    <c:if test="${message ne null}">
-        <fmt:message bundle="${loc}" key="${message}" var="messageText"/>
+
+    <fmt:message bundle="${loc}" key="comment.input.placeholder" var="commentsPlaceholder"/>
+
+    <c:if test="${requestScope.message ne null}">
+        <fmt:message bundle="${loc}" key="${requestScope.message}" var="messageText"/>
     </c:if>
 </head>
 <body>
@@ -132,7 +138,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <div class="custom-navbar">
                         <span></span>
                         <span></span>
@@ -141,8 +147,21 @@
                     <div class="main-menu">
                         <ul>
                             <li class="active"><a href="Controller?command=go_to_home_page">${home}</a></li>
-                            <li><a href="#">FAQ</a></li>
-                            <c:if test="${message ne null}">
+                            <c:choose>
+                                <c:when test="${sessionScope.user eq null}">
+                                    <li><a href="#">FAQ</a></li>
+                                </c:when>
+                                <c:when test="${sessionScope.user.role.value eq 0}">
+                                    <li><a href="Controller?command=go_to_types_page">${assortment}</a></li>
+                                    <li><a href="Controller?command=go_to_users_page">${usersButton}</a></li>
+                                    <li><a href="#">FAQ</a></li>
+                                </c:when>
+                                <c:when test="${sessionScope.user.role.value eq 1}">
+                                    <li><a href="Controller?command=go_to_add_ad_page">${addButton}</a></li>
+                                    <li><a href="#">FAQ</a></li>
+                                </c:when>
+                            </c:choose>
+                            <c:if test="${requestScope.message ne null}">
                                 <li>
                                     <c:out value="${messageText}"/>
                                 </li>
@@ -413,6 +432,18 @@
                                                         </p>
                                                     </div>
                                                 </div>
+                                                <c:choose>
+                                                    <c:when test="${sessionScope.user.role.value eq 0}">
+                                                        <a href="Controller?command=delete_comment&adIdInfo=${sessionScope.adPageInfo.id}&commentId=${comment.id}"
+                                                           style="color: #0b2e13"><em
+                                                                class="fa fa-close fa-2x"></em></a>
+                                                    </c:when>
+                                                    <c:when test="${sessionScope.user.role.value eq 1 and sessionScope.user.id eq comment.user.id}">
+                                                        <a href="Controller?command=delete_comment&adIdInfo=${sessionScope.adPageInfo.id}&commentId=${comment.id}"
+                                                           style="color: #0b2e13"><em
+                                                                class="fa fa-close fa-2x"></em></a>
+                                                    </c:when>
+                                                </c:choose>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -446,6 +477,8 @@
                         <h4>
                             <c:out value="${sessionScope.adPageInfo.userInfo.name}"/>
                             <c:out value="${sessionScope.adPageInfo.userInfo.phoneNumber}"/>
+                            <div class="icon"><i class="fa fa-map-marker" aria-hidden="true">
+                                <c:out value=" ${sessionScope.adPageInfo.userInfo.city.name}"/></i></div>
                         </h4>
                         <p>
                                 ${messengersInfo}

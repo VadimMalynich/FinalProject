@@ -1,5 +1,8 @@
 package by.training.finalproject.service.validation;
 
+/**
+ * Class for validate ad info before add in database
+ */
 public class AdValidator {
     private static final String EMPTY_STRING = "";
     private static final String MATERIAL_REGEX = "^[A-Za-z]{3,}([(]\\d{1,3}[%][)])?([,]\\s[A-Za-z]{3,}([(]\\d{1,2}[%][)])?)*$";
@@ -30,7 +33,8 @@ public class AdValidator {
         if (material == null || EMPTY_STRING.equals(material)) {
             return false;
         }
-        return material.matches(MATERIAL_REGEX);
+        return material.length() <= 50;
+//        return material.matches(MATERIAL_REGEX);
     }
 
     /**
@@ -66,7 +70,10 @@ public class AdValidator {
      * @return {@code true} if {@code picture} correct, {@code false} otherwise
      */
     public static boolean validatePicture(String picture) {
-        if (picture == null || EMPTY_STRING.equals(picture)) {
+        if (picture == null) {
+            return true;
+        }
+        if (EMPTY_STRING.equals(picture)) {
             return false;
         }
         return picture.length() <= 260;

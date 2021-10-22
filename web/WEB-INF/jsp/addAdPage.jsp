@@ -30,10 +30,12 @@
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="langs.labels" var="loc"/>
+
     <fmt:message bundle="${loc}" key="logout.button" var="logout"/>
     <fmt:message bundle="${loc}" key="profile.button" var="profile"/>
     <fmt:message bundle="${loc}" key="home.button" var="home"/>
     <fmt:message bundle="${loc}" key="add.ad.button" var="addAdButton"/>
+
     <fmt:message bundle="${loc}" key="label.clothesType" var="typeLabel"/>
     <fmt:message bundle="${loc}" key="label.topic" var="topicLabel"/>
     <fmt:message bundle="${loc}" key="label.material" var="materialLabel"/>
@@ -45,15 +47,18 @@
     <fmt:message bundle="${loc}" key="label.sex.child" var="sexChild"/>
     <fmt:message bundle="${loc}" key="label.description" var="descriptionLabel"/>
     <fmt:message bundle="${loc}" key="label.photo" var="photoLabel"/>
+
     <fmt:message bundle="${loc}" key="topic.input.placeholder" var="topicPlaceholder"/>
     <fmt:message bundle="${loc}" key="topic.input.placeholderFocus" var="topicPlaceholderFocus"/>
     <fmt:message bundle="${loc}" key="material.input.placeholder" var="materialPlaceholder"/>
     <fmt:message bundle="${loc}" key="material.input.placeholderFocus" var="materialPlaceholderFocus"/>
     <fmt:message bundle="${loc}" key="description.textarea.placeholder" var="descriptionPlaceholder"/>
+
+    <fmt:message bundle="${loc}" key="page.addAd" var="pageTitle"/>
+
     <c:if test="${requestScope.message ne null}">
         <fmt:message bundle="${loc}" key="${requestScope.message}" var="messageText"/>
     </c:if>
-    <fmt:message bundle="${loc}" key="page.addAd" var="pageTitle"/>
 
     <title>${pageTitle}</title>
 </head>
@@ -85,8 +90,20 @@
                     </div>
                     <div class="main-menu main-menu-light">
                         <ul>
+                            <li>
+                                <a href="Controller?command=ru_RU">
+                                    <img src="<c:url value="/resources/images/elements/flag_russia.png"/> " height="30"
+                                         width="40" alt="RU">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="Controller?command=en_US">
+                                    <img src="<c:url value="/resources/images/elements/flag_usa.png"/> " height="30"
+                                         width="40" alt="EN">
+                                </a>
+                            </li>
                             <li class="menu-btn">
-                                <a href="#" class="login">${profile}</a>
+                                <a href="Controller?command=go_to_user_profile_page" class="login">${profile}</a>
                                 <a href="Controller?command=logout" class="template-btn">${logout}</a>
                             </li>
                         </ul>
@@ -102,15 +119,21 @@
                                 <li class="active"><a href="Controller?command=go_to_home_page">${home}</a></li>
                                 <li><a href="Controller?command=go_to_add_ad_page">${addAdButton}</a></li>
                                 <li><a href="#">FAQ</a></li>
-                                <c:if test="${requestScope.message ne null}">
-                                    <li>
-                                        <c:out value="${messageText}"/>
-                                    </li>
-                                </c:if>
                             </ul>
                         </div>
                     </div>
                 </div>
+                <c:if test="${requestScope.message ne null}">
+                    <div class="col-lg-6">
+                        <div class="main-menu main-menu-light">
+                            <ul>
+                                <li style="color: #fff">
+                                    <c:out value="${messageText}"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </c:if>
             </div>
         </div>
         <div class="page-title text-center">

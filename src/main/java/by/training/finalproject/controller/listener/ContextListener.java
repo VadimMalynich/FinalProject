@@ -12,7 +12,7 @@ public class ContextListener implements ServletContextListener {
         try {
             ConnectionPool.getInstance().init();
         } catch (ConnectionPoolException e) {
-            throw new RuntimeException("Error in ConnectionPool.init",e);
+            throw new RuntimeException("Error in ConnectionPool.init", e);
         }
     }
 
@@ -21,7 +21,7 @@ public class ContextListener implements ServletContextListener {
         try {
             ConnectionPool.getInstance().destroy();
         } catch (ConnectionPoolException e) {
-            throw new RuntimeException("Error in ConnectionPool.destroy",e);
+            throw new RuntimeException("Error in ConnectionPool.destroy", e);
         }
     }
 }

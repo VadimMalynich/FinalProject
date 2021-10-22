@@ -4,21 +4,15 @@
         <Property name="patternfull">
             %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{5} - %msg%n
         </Property>
-        <Property name="patternshort">
-            %d{HH:mm:ss.SSS} [%t] %-5level %logger{1} - %msg%n
-        </Property>
     </Properties>
     <Appenders>
         <File name="TxtFile" fileName="logs/applicationLog.log" bufferedIO="true">
             <PatternLayout pattern="${patternfull}"/>
         </File>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${patternshort}"/>
-        </Console>
     </Appenders>
     <Loggers>
         <Root level="all">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="TxtFile"/>
         </Root>
         <Logger name="by.training.finalproject.controller.command.impl.AddComment" level="all"
                 additivity="true">
@@ -49,6 +43,62 @@
             <AppenderRef ref="TxtFile"/>
         </Logger>
         <Logger name="by.training.finalproject.controller.command.impl.GoToAddAdPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.AddAdInfo" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToUserProfilePage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.DeleteAdInfo" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToEditAddPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.EditAdInfo" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToTypesPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.AddClothesType" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.EditClothesType" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.DeleteClothesType" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToUsersPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.DeleteUser" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.GoToEditUserPage" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.EditUser" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.DeleteComment" level="all"
                 additivity="true">
             <AppenderRef ref="TxtFile"/>
         </Logger>

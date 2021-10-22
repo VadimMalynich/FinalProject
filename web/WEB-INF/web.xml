@@ -12,6 +12,14 @@
     <servlet>
         <servlet-name>MyController</servlet-name>
         <servlet-class>by.training.finalproject.controller.Controller</servlet-class>
+        <init-param>
+            <description>
+                Set the file path where uploaded files should be stored in. This parameter is
+                required.
+            </description>
+            <param-name>uploadFilePath</param-name>
+            <param-value>D:/finalProject/web/resources/images/adsPhoto</param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>MyController</servlet-name>
@@ -39,20 +47,20 @@
         </description>
         <filter-name>multipartFilter</filter-name>
         <filter-class>by.training.finalproject.controller.filter.MultipartFilter</filter-class>
-        <init-param>
-            <description>
-                Sets the maximum file size of the uploaded file in bytes. Set to 0 to indicate an
-                unlimited file size. The example value of 1048576 indicates a maximum file size of
-                1MB. This parameter is not required and can be removed safely.
-            </description>
-            <param-name>maxFileSize</param-name>
-            <param-value>1048576</param-value>
-        </init-param>
+<!--        <init-param>-->
+<!--            <description>-->
+<!--                Sets the maximum file size of the uploaded file in bytes. Set to 0 to indicate an-->
+<!--                unlimited file size. The example value of 1048576 indicates a maximum file size of-->
+<!--                1MB. This parameter is not required and can be removed safely.-->
+<!--            </description>-->
+<!--            <param-name>maxFileSize</param-name>-->
+<!--            <param-value>1048576</param-value>-->
+<!--        </init-param>-->
     </filter>
 
     <filter-mapping>
         <filter-name>EncodingFilter</filter-name>
-        <url-pattern>/Controller</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <filter-mapping>

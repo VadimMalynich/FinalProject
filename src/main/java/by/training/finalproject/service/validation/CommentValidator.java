@@ -1,5 +1,8 @@
 package by.training.finalproject.service.validation;
 
+/**
+ * Class for validate comment data before add in database
+ */
 public class CommentValidator {
     private static final String EMPTY_STRING = "";
 

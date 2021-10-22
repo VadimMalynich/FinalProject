@@ -17,32 +17,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class GoToAddAdPage implements Command {
-    private static final Logger userLogger = LogManager.getLogger(GoToAddAdPage.class);
+public class GoToTypesPage implements Command {
+    private static final Logger userLogger = LogManager.getLogger(GoToTypesPage.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.setAttribute("page", "Controller?command=go_to_add_ad_page");
-
+        session.setAttribute("page", "Controller?command=go_to_types_page");
         if (request.getParameter("message") != null) {
             request.setAttribute("message", request.getParameter("message"));
         }
 
         ServiceProvider provider = ServiceProvider.getInstance();
         ClothesTypeService clothesTypeService = provider.getClothesTypeService();
+
         try {
             List<ClothesType> clothesTypeList = clothesTypeService.getAll();
-            if (clothesTypeList == null) {
-                response.sendRedirect("Controller?command=go_to_home_page&message=message.error.clothesTypes");
-            } else {
-                session.setAttribute("clothesTypes", clothesTypeList);
-                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/addAdPage.jsp");
-                requestDispatcher.forward(request, response);
-            }
+            session.setAttribute("clothesTypeList", clothesTypeList);
         } catch (ServiceException e) {
             userLogger.error(e);
-            response.sendRedirect("Controller?command=go_to_home_page&message=message.error.server");
         }
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/clothesTypesPage.jsp");
+        requestDispatcher.forward(request, response);
     }
 }

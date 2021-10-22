@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum ClothesSize implements Serializable {
     XS(1), S(2), M(3), L(4), XL(5), XXL(6), XXXL(7);
-    private Integer value;
+    private final Integer value;
 
     ClothesSize(Integer value) {
         this.value = value;

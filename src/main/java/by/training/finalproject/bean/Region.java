@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum Region implements Serializable {
     BREST(1), VITEBSK(2), GOMEL(3), GRODNO(4), MINSK(5), MOGILEV(6);
-    private Integer value;
+    private final Integer value;
 
     Region(Integer value) {
         this.value = value;

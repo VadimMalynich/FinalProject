@@ -19,6 +19,13 @@ public class AdInfo extends Entity {
         this.ad = ad;
     }
 
+    public AdInfo(Integer id, User userInfo, Integer categoryInfo, Ad ad) {
+        super(id);
+        this.userInfo = userInfo;
+        this.categoryInfo = new ClothesType(categoryInfo);
+        this.ad = ad;
+    }
+
     public AdInfo(Integer id, User userInfo, ClothesType categoryInfo, Ad ad) {
         super(id);
         this.userInfo = userInfo;
@@ -106,11 +113,8 @@ public class AdInfo extends Entity {
     public String toString() {
         return "AdInfo{" +
                 "id=" + getId() +
-                ", userName=" + userInfo.getName() +
-                ", userPhone=" + userInfo.getPhoneNumber() +
-                ", userCity=" + userInfo.getCity()+
-                ", userMessengers=" + userInfo.getMessengers() +
-                ", category=" + categoryInfo.getCategory() +
+                ", user=" + userInfo +
+                ", category=" + categoryInfo +
                 ", ad=" + ad +
                 ", likesCount=" + likesCount +
                 ", commentsCount=" + commentsCount +

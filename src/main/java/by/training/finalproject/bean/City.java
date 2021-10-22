@@ -24,14 +24,6 @@ public class City extends Entity {
         this.name = name;
     }
 
-    public Integer getId() {
-        return super.getId();
-    }
-
-    public void setId(Integer id) {
-        super.setId(id);
-    }
-
     public Region getRegion() {
         return region;
     }

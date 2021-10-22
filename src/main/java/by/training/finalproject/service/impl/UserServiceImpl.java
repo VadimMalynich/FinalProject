@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Integer id) throws ServiceException {
+    public void delete(Integer id) throws ServiceException {
         if (id == null || id < 1) {
             throw new ServiceException("Wrong id for delete user");
         }
@@ -82,6 +82,9 @@ public class UserServiceImpl implements UserService {
             Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
             try {
                 transaction.initTransaction(userDao);
+                if (userDao.getUserRole(id) == 0) {
+                    throw new ServiceException("Cannot delete admin");
+                }
                 userDao.delete(id);
                 transaction.commit();
             } catch (DaoException | ConnectionPoolException e) {
@@ -97,18 +100,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void edit(User user) throws ServiceException {
+    public void edit(User user, String[] messengers) throws ServiceException {
         if (user == null) {
             throw new ServiceException("Can not edit user");
         }
         try {
-            validateUserData(user);
+            validateEditUserData(user);
             UserDao userDao = DaoFactory.getInstance().getUserDao();
             Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
             try {
                 transaction.initTransaction(userDao);
-                char[] pass = user.getPassword().toCharArray();
-                user.setPassword(hasher.hash(pass));
+                user.setMessengers(checkMessengers(messengers));
                 userDao.edit(user);
                 userDao.editMessengers(user.getId(), user.getMessengers());
                 transaction.commit();
@@ -121,7 +123,40 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException exception) {
             throw new ServiceException(exception);
         }
+    }
 
+    @Override
+    public void edit(User user, String[] messengers, String oldPass, String newPass) throws ServiceException {
+        if (user == null) {
+            throw new ServiceException("Can not edit user");
+        }
+        try {
+            validateEditUserData(user);
+            validatePasswords(oldPass, newPass);
+            UserDao userDao = DaoFactory.getInstance().getUserDao();
+            Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
+            try {
+                transaction.initTransaction(userDao);
+                user.setMessengers(checkMessengers(messengers));
+                char[] pass = oldPass.toCharArray();
+                if (hasher.checkPassword(pass, user.getPassword())) {
+                    char[] newPassword = newPass.toCharArray();
+                    user.setPassword(hasher.hash(newPassword));
+                } else {
+                    throw new ServiceException("Entered wrong old password");
+                }
+                userDao.edit(user);
+                userDao.editMessengers(user.getId(), user.getMessengers());
+                transaction.commit();
+            } catch (DaoException | ConnectionPoolException e) {
+                transaction.rollback();
+                throw new ServiceException(e);
+            } finally {
+                transaction.endTransaction();
+            }
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
+        }
     }
 
     @Override
@@ -135,10 +170,10 @@ public class UserServiceImpl implements UserService {
             try {
                 transaction.initTransaction(userDao);
                 String dbPass = userDao.getUserPassword(login);
-                char[] pass = password.toCharArray();
-                if(dbPass == null){
+                if (dbPass == null) {
                     throw new ServiceException("Entered wrong login");
                 }
+                char[] pass = password.toCharArray();
                 if (hasher.checkPassword(pass, dbPass)) {
                     user = userDao.authorization(login);
                 } else {
@@ -155,6 +190,32 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(exception);
         }
 
+        return user;
+    }
+
+    @Override
+    public User getUser(Integer id) throws ServiceException {
+        if (id == null || id < 1) {
+            throw new ServiceException("Invalid ad id for take user info");
+        }
+        User user;
+        try {
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            UserDao userDao = daoFactory.getUserDao();
+            Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
+            try {
+                transaction.initTransaction(userDao);
+                user = userDao.getUserInfo(id);
+                transaction.commit();
+            } catch (DaoException | ConnectionPoolException e) {
+                transaction.rollback();
+                throw new ServiceException(e);
+            } finally {
+                transaction.endTransaction();
+            }
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
+        }
         return user;
     }
 
@@ -229,12 +290,33 @@ public class UserServiceImpl implements UserService {
         return returnMessengers;
     }
 
+    private void validatePasswords(String oldPass, String newPass) throws ServiceException {
+        if (!UserValidator.validatePassword(oldPass)) {
+            throw new ServiceException("Wrong old password");
+        }
+        if (!UserValidator.validatePassword(newPass)) {
+            throw new ServiceException("Wrong new password");
+        }
+    }
+
     private void validateAuthorizationData(String login, String password) throws ServiceException {
         if (!UserValidator.validateLogin(login)) {
             throw new ServiceException("Wrong email");
         }
         if (!UserValidator.validatePassword(password)) {
             throw new ServiceException("Wrong password");
+        }
+    }
+
+    private void validateEditUserData(User user) throws ServiceException {
+        if (!UserValidator.validateName(user.getName())) {
+            throw new ServiceException("Wrong name");
+        }
+        if (!UserValidator.validatePhone(user.getPhoneNumber())) {
+            throw new ServiceException("Wrong phone number");
+        }
+        if (UserValidator.validateCity(user.getCity().getId())) {
+            throw new ServiceException("Wrong cityID");
         }
     }
 

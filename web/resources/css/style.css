@@ -2231,7 +2231,7 @@ input:focus, textarea:focus {
 }
 
 .section-top-border {
-    padding: 50px 0;
+    padding: 50px 30px;
     border-top: 1px dotted #eee
 }
 
@@ -2784,7 +2784,8 @@ h6 {
     background: #f9f9ff;
     padding: 20px 20px;
     height: 200px;
-    resize: none
+    resize: none;
+    text-align: left;
 }
 
 .single-textarea:focus {

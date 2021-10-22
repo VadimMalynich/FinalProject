@@ -37,30 +37,35 @@
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="langs.labels" var="loc"/>
+
     <fmt:message bundle="${loc}" key="signIn.button" var="signIn"/>
     <fmt:message bundle="${loc}" key="signUp.button" var="signUp"/>
     <fmt:message bundle="${loc}" key="add.ad.button" var="addButton"/>
     <fmt:message bundle="${loc}" key="logout.button" var="logout"/>
     <fmt:message bundle="${loc}" key="profile.button" var="profile"/>
+    <fmt:message bundle="${loc}" key="assortment.button" var="assortment"/>
+    <fmt:message bundle="${loc}" key="users.button" var="usersButton"/>
     <fmt:message bundle="${loc}" key="home.button" var="home"/>
+
     <fmt:message bundle="${loc}" key="label.clothesTypes" var="types"/>
-    <fmt:message bundle="${loc}" key="search.input.placeholder" var="searchPlaceholder"/>
     <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst"/>
     <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond"/>
     <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird"/>
     <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst"/>
     <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond"/>
     <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird"/>
-    <fmt:message bundle="${loc}" key="message.error.server" var="serverError"/>
+
+    <fmt:message bundle="${loc}" key="search.input.placeholder" var="searchPlaceholder"/>
+
+    <fmt:message bundle="${loc}" key="page.home" var="pageTitle"/>
+
     <fmt:message bundle="${loc}" key="message.searchResults" var="searchResults"/>
     <fmt:message bundle="${loc}" key="message.clothesType" var="clothesTypeMessage"/>
     <fmt:message bundle="${loc}" key="message.emptyAds" var="emptyAds"/>
     <fmt:message bundle="${loc}" key="message.emptyAds.continue" var="emptyAdsContinue"/>
-    <c:if test="${message ne null}">
-        <fmt:message bundle="${loc}" key="${message}" var="messageText"/>
+    <c:if test="${requestScope.message ne null}">
+        <fmt:message bundle="${loc}" key="${requestScope.message}" var="messageText"/>
     </c:if>
-    <fmt:message bundle="${loc}" key="message.emptyAds.continue" var="emptyAdsContinue"/>
-    <fmt:message bundle="${loc}" key="page.home" var="pageTitle"/>
 
     <!-- Page Title -->
     <title>${pageTitle}</title>
@@ -145,6 +150,8 @@
                                     <li><a href="#">FAQ</a></li>
                                 </c:when>
                                 <c:when test="${sessionScope.user.role.value eq 0}">
+                                    <li><a href="Controller?command=go_to_types_page">${assortment}</a></li>
+                                    <li><a href="Controller?command=go_to_users_page">${usersButton}</a></li>
                                     <li><a href="#">FAQ</a></li>
                                 </c:when>
                                 <c:when test="${sessionScope.user.role.value eq 1}">
@@ -152,7 +159,7 @@
                                     <li><a href="#">FAQ</a></li>
                                 </c:when>
                             </c:choose>
-                            <c:if test="${message ne null}">
+                            <c:if test="${requestScope.message ne null}">
                                 <li>
                                     <c:out value="${messageText}"/>
                                 </li>
@@ -192,14 +199,32 @@
 
 <!-- Start blog-posts Area -->
 <c:choose>
-    <c:when test="${not empty adsList}">
+    <c:when test="${not empty sessionScope.adsList}">
         <section class="blog-posts-area section-padding">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 post-list blog-post-list">
-                        <c:forEach var="ad" items="${adsList}">
+                        <c:forEach var="ad" items="${sessionScope.adsList}">
                             <div class="single-post">
-                                <img class="img-fluid" src="<c:url value="${ad.ad.picture}"/>" alt="">
+                                <c:choose>
+                                    <c:when test="${sessionScope.user.role.value eq 0}">
+                                        <div class="row">
+                                            <img class="img-fluid" width="80%" src="<c:url value="${ad.ad.picture}"/>"
+                                                 alt="">
+                                            <a href="Controller?command=go_to_edit_ad_page&editAdIdInfo=${ad.id}"
+                                               style="margin-left: 50px; color: #0b2e13">
+                                                <em class="fa fa-edit fa-2x"></em>
+                                            </a>
+                                            <a href="Controller?command=delete_ad&deleteAdIdInfo=${ad.id}"
+                                               style="margin-left: 15px; color: #0b2e13">
+                                                <em class="fa fa-close fa-2x"></em>
+                                            </a>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${sessionScope.user.role.value eq 1 or sessionScope.user == null}">
+                                        <img class="img-fluid" src="<c:url value="${ad.ad.picture}"/>" alt="">
+                                    </c:when>
+                                </c:choose>
                                 <ul class="tags">
                                     <li>
                                         <c:out value="${ad.ad.date}"/>
@@ -268,12 +293,11 @@
                                 <button type="submit"><em class="fa fa-search"></em></button>
                             </form>
                         </div>
-
-                        <c:if test="${categoryCountList ne null}">
+                        <c:if test="${sessionScope.categoryCountList ne null}">
                             <div class="single-widget category-widget">
                                 <h4 class="title">${types}</h4>
                                 <ul>
-                                    <c:forEach var="type" items="${categoryCountList}">
+                                    <c:forEach var="type" items="${sessionScope.categoryCountList}">
                                         <li>
                                             <a href="Controller?command=gotofilteradpage&filterIDType=${type.id}"
                                                class="justify-content-between align-items-center d-flex">

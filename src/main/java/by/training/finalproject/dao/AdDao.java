@@ -13,7 +13,7 @@ import java.util.List;
 public class AdDao extends AbstractDao<Integer, AdInfo> {
     private static final String GET_ALL_ADS_INFO = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info";
     private static final String DELETE_AD = "DELETE FROM ads_info WHERE id=?";
-    private static final String ADD_AD = "INSERT INTO ads_info (category_id, date, topic, material, size, sex, description, picture) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String ADD_AD = "INSERT INTO ads_info (user_id, category_id, date, topic, material, size, sex, description, picture) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String EDIT_AD = "UPDATE ads_info SET category_id=?, date=?, topic=?, material=?, size=?, sex=?, description=?, picture=? WHERE id=?";
     private static final String GET_AD_INFO = "SELECT user_id, category_id, date, topic, material, size, sex, description, picture FROM ads_info WHERE id=?";
     private static final String GET_USER_ADS = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info WHERE user_id=?";
@@ -66,14 +66,15 @@ public class AdDao extends AbstractDao<Integer, AdInfo> {
         PreparedStatement prSt = null;
         try {
             prSt = connection.prepareStatement(ADD_AD);
-            prSt.setInt(1, adInfo.getCategoryInfo().getId());
-            prSt.setDate(2, adInfo.getAd().getDate());
-            prSt.setString(3, adInfo.getAd().getTopic());
-            prSt.setString(4, adInfo.getAd().getMaterial());
-            prSt.setInt(5, adInfo.getAd().getSize().getValue());
-            prSt.setInt(6, adInfo.getAd().getSex().getValue());
-            prSt.setString(7, adInfo.getAd().getDescription());
-            prSt.setString(10, adInfo.getAd().getPicture());
+            prSt.setInt(1, adInfo.getUserInfo().getId());
+            prSt.setInt(2, adInfo.getCategoryInfo().getId());
+            prSt.setDate(3, adInfo.getAd().getDate());
+            prSt.setString(4, adInfo.getAd().getTopic());
+            prSt.setString(5, adInfo.getAd().getMaterial());
+            prSt.setInt(6, adInfo.getAd().getSize().getValue());
+            prSt.setInt(7, adInfo.getAd().getSex().getValue());
+            prSt.setString(8, adInfo.getAd().getDescription());
+            prSt.setString(9, adInfo.getAd().getPicture());
             prSt.executeUpdate();
         } catch (SQLException e) {
             throw new DaoException(e);

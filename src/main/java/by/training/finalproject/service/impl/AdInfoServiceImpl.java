@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class AdInfoServiceImpl implements AdInfoService {
-    private static final String PICTURE_PATH = "/resources/images/adsPhoto/";
+    private static final String DIR_PATH = "/resources/images/adsPhoto/";
 
     @Override
     public List<AdInfo> getAll() throws ServiceException {
@@ -33,7 +33,7 @@ public class AdInfoServiceImpl implements AdInfoService {
                 list = adDao.getAll();
                 if (!list.isEmpty()) {
                     for (AdInfo adInfo : list) {
-                        adInfo.getAd().setPicture(PICTURE_PATH + adInfo.getAd().getPicture());
+                        adInfo.getAd().setPicture(DIR_PATH + adInfo.getAd().getPicture());
                         adInfo.setLikesCount(adDao.getLikesCount(adInfo.getId()));
                         adInfo.setCommentsCount(commentDao.getCommentCount(adInfo.getId()));
                     }
@@ -62,6 +62,9 @@ public class AdInfoServiceImpl implements AdInfoService {
             Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
             try {
                 transaction.initTransaction(adDao);
+                if (adInfo.getAd().getPicture() == null) {
+                    adInfo.getAd().setPicture("default.png");
+                }
                 Date date = new Date(Calendar.getInstance().getTimeInMillis());
                 adInfo.setDate(date);
                 adDao.add(adInfo);
@@ -113,6 +116,10 @@ public class AdInfoServiceImpl implements AdInfoService {
                 transaction.initTransaction(adDao);
                 Date date = new Date(Calendar.getInstance().getTimeInMillis());
                 newAdInfo.setDate(date);
+                if (newAdInfo.getAd().getPicture().contains("/")) {
+                    String temp = newAdInfo.getAd().getPicture();
+                    newAdInfo.getAd().setPicture(temp.substring(temp.lastIndexOf("/") + 1));
+                }
                 adDao.edit(newAdInfo);
                 transaction.commit();
             } catch (DaoException | ConnectionPoolException e) {
@@ -142,7 +149,7 @@ public class AdInfoServiceImpl implements AdInfoService {
             try {
                 transaction.initTransaction(adDao, commentDao, userDao, clothesTypeDao);
                 adInfo = adDao.getAdInfo(id);
-                adInfo.getAd().setPicture(PICTURE_PATH + adInfo.getAd().getPicture());
+                adInfo.getAd().setPicture(DIR_PATH + adInfo.getAd().getPicture());
                 User user = userDao.getUserAdInfo(adInfo.getUserInfo().getId());
                 ClothesType clothesType = adInfo.getCategoryInfo();
                 clothesType.setCategory(clothesTypeDao.getClothesCategory(clothesType.getId()));
@@ -161,6 +168,40 @@ public class AdInfoServiceImpl implements AdInfoService {
             throw new ServiceException(exception);
         }
         return adInfo;
+    }
+
+    @Override
+    public List<AdInfo> getUserAds(Integer userId) throws ServiceException {
+        if (userId == null || userId < 1) {
+            throw new ServiceException("Wrong user id for getting user ads");
+        }
+        List<AdInfo> list;
+        try {
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            AdDao adDao = daoFactory.getAdInfoDao();
+            CommentDao commentDao = daoFactory.getCommentDao();
+            Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
+            try {
+                transaction.initTransaction(adDao, commentDao);
+                list = adDao.getUserAds(userId);
+                if (!list.isEmpty()) {
+                    for (AdInfo adInfo : list) {
+                        adInfo.getAd().setPicture(DIR_PATH + adInfo.getAd().getPicture());
+                        adInfo.setLikesCount(adDao.getLikesCount(adInfo.getId()));
+                        adInfo.setCommentsCount(commentDao.getCommentCount(adInfo.getId()));
+                    }
+                }
+                transaction.commit();
+            } catch (DaoException | ConnectionPoolException e) {
+                transaction.rollback();
+                throw new ServiceException(e);
+            } finally {
+                transaction.endTransaction();
+            }
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
+        }
+        return list;
     }
 
     @Override

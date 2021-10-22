@@ -80,12 +80,12 @@ public class MultipartFilter implements Filter {
      */
     public void init(FilterConfig filterConfig) throws ServletException {
         // Configure maxFileSize.
-        String maxFileSize = filterConfig.getInitParameter("maxFileSize");
-        if (maxFileSize != null) {
-            if (!maxFileSize.matches("^\\d+$")) {
+        String fileSize = filterConfig.getInitParameter("maxFileSize");
+        if (fileSize != null) {
+            if (!fileSize.matches("^\\d+$")) {
                 throw new ServletException("MultipartFilter 'maxFileSize' is not numeric.");
             }
-            this.maxFileSize = Long.parseLong(maxFileSize);
+            this.maxFileSize = Long.parseLong(fileSize);
         }
     }
 
@@ -151,7 +151,9 @@ public class MultipartFilter implements Filter {
 
         try {
             // Parse the multipart request items.
-            multipartItems = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            factory.setDefaultCharset("UTF-8");
+            multipartItems = new ServletFileUpload(factory).parseRequest(request);
             // Note: we could use ServletFileUpload#setFileSizeMax() here, but that would throw a
             // FileUploadException immediately without processing the other fields. So we're
             // checking the file size only if the items are already parsed. See processFileField().
@@ -160,7 +162,7 @@ public class MultipartFilter implements Filter {
         }
 
         // Prepare the request parameter map.
-        Map<String, String[]> parameterMap = new HashMap<String, String[]>();
+        Map<String, String[]> parameterMap = new HashMap<>();
 
         // Loop through multipart request items.
         for (FileItem multipartItem : multipartItems) {
@@ -239,19 +241,23 @@ public class MultipartFilter implements Filter {
     private static HttpServletRequest wrapRequest(
             HttpServletRequest request, final Map<String, String[]> parameterMap) {
         return new HttpServletRequestWrapper(request) {
+            @Override
             public Map<String, String[]> getParameterMap() {
                 return parameterMap;
             }
 
+            @Override
             public String[] getParameterValues(String name) {
                 return parameterMap.get(name);
             }
 
+            @Override
             public String getParameter(String name) {
                 String[] params = getParameterValues(name);
                 return params != null && params.length > 0 ? params[0] : null;
             }
 
+            @Override
             public Enumeration<String> getParameterNames() {
                 return Collections.enumeration(parameterMap.keySet());
             }

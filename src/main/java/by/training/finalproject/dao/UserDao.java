@@ -17,9 +17,11 @@ public class UserDao extends AbstractDao<Integer, User> {
     private static final String ADD_USER = "INSERT INTO users (email, password, name, phone, city_id) VALUES (?,?,?,?,?)";
     private static final String EDIT_USER = "UPDATE users SET email=?, password=?, name=?, phone=?, role=?, city_id=? WHERE id=?";
     private static final String AUTHORIZATION = "SELECT id, email, password, name, phone, role, city_id FROM users WHERE email=?";
+    private static final String GET_USER_INFO = "SELECT email, password, name, phone, role, city_id FROM users WHERE id=?";
     private static final String GET_USER_AD_INFO = "SELECT name, phone, city_id FROM users WHERE id=?";
     private static final String GET_USER_LOGIN = "SELECT email FROM users WHERE id=?";
     private static final String GET_USER_PASSWORD = "SELECT password FROM users WHERE email=?";
+    private static final String GET_USER_ROLE = "SELECT role FROM users WHERE id=?";
     private static final String GET_USER_ID = "SELECT id FROM users WHERE email=?";
     private static final String GET_USER_MESSENGERS = "SELECT telegram, viber, whatsapp FROM messengers WHERE user_id = ?";
     private static final String ADD_MESSENGERS = "INSERT INTO messengers (user_id, telegram, viber, whatsapp) VALUES (?,?,?,?)";
@@ -147,6 +149,35 @@ public class UserDao extends AbstractDao<Integer, User> {
     }
 
     /**
+     * Method for getting user info
+     *
+     * @param id user id
+     * @return object of {@code User} with needed info
+     * @throws DaoException            if an error occurs when reading data from the database
+     * @throws ConnectionPoolException when an error occurs when closing {@code Statement}
+     */
+    public User getUserInfo(Integer id) throws DaoException, ConnectionPoolException {
+        PreparedStatement prSt = null;
+        ResultSet resSet;
+        User user = null;
+        try {
+            prSt = connection.prepareStatement(GET_USER_INFO);
+            prSt.setInt(1, id);
+            resSet = prSt.executeQuery();
+            if (resSet.next()) {
+                user = new User(id, resSet.getString(1), resSet.getString(2),resSet.getString(3),
+                        resSet.getString(4), UserRole.getByCode(resSet.getInt(5)),
+                        getCityInfo(resSet.getInt(6)), getUserMessengers(id));
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            close(prSt);
+        }
+        return user;
+    }
+
+    /**
      * Method for getting user info that needed for displaying in ad
      *
      * @param id id of ad
@@ -227,6 +258,33 @@ public class UserDao extends AbstractDao<Integer, User> {
             close(prSt);
         }
         return password;
+    }
+
+    /**
+     * Method for getting user role
+     *
+     * @param id id of user
+     * @return {@code Integer} value of role
+     * @throws DaoException            if an error occurs when reading data from the database
+     * @throws ConnectionPoolException when an error occurs when closing {@code Statement}
+     */
+    public Integer getUserRole(Integer id) throws DaoException, ConnectionPoolException {
+        PreparedStatement prSt = null;
+        ResultSet resSet;
+        Integer role = null;
+        try {
+            prSt = connection.prepareStatement(GET_USER_ROLE);
+            prSt.setInt(1, id);
+            resSet = prSt.executeQuery();
+            if (resSet.next()) {
+                role = resSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            close(prSt);
+        }
+        return role;
     }
 
     /**

@@ -9,9 +9,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.testng.Assert.*;
@@ -132,7 +130,7 @@ public class UserServiceImplTest {
     @Test(testName = "Positive scenario of getting needed user info for ad", expectedExceptions = ServiceException.class,
             expectedExceptionsMessageRegExp = "Wrong id for delete user", dataProvider = "testIdProvider")
     public void testDeleteUserNegative(Integer id) throws ServiceException {
-        service.deleteUser(id);
+        service.delete(id);
     }
 
 

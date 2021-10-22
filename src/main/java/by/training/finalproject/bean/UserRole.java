@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum UserRole implements Serializable {
     ADMINISTRATOR(0), USER(1);
-    private Integer value;
+    private final Integer value;
 
     UserRole(Integer value) {
         this.value = value;

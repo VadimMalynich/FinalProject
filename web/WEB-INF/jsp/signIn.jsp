@@ -39,18 +39,24 @@
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="langs.labels" var="loc"/>
+
     <fmt:message bundle="${loc}" key="signIn.button" var="signIn"/>
     <fmt:message bundle="${loc}" key="signUp.button" var="signUp"/>
-    <fmt:message bundle="${loc}" key="login.input.title" var="loginTitle"/>
-    <fmt:message bundle="${loc}" key="password.input.title" var="passwordTitle"/>
+
     <fmt:message bundle="${loc}" key="label.login" var="login"/>
     <fmt:message bundle="${loc}" key="label.password" var="password"/>
+
+    <fmt:message bundle="${loc}" key="login.input.title" var="loginTitle"/>
+    <fmt:message bundle="${loc}" key="password.input.title" var="passwordTitle"/>
+
     <fmt:message bundle="${loc}" key="login.input.placeholder" var="loginPlaceholder"/>
     <fmt:message bundle="${loc}" key="password.input.placeholder" var="passwordPlaceholder"/>
-    <c:if test="${message ne null}">
-        <fmt:message bundle="${loc}" key="${message}" var="messageText"/>
-    </c:if>
+
     <fmt:message bundle="${loc}" key="page.signIn" var="pageTitle"/>
+
+    <c:if test="${requestScope.message ne null}">
+        <fmt:message bundle="${loc}" key="${requestScope.message}" var="messageText"/>
+    </c:if>
 
     <!-- Page Title -->
     <title>${pageTitle}</title>
@@ -82,9 +88,9 @@
                     </div>
                     <div class="main-menu main-menu-light">
                         <ul>
-                            <c:if test="${message ne null}">
+                            <c:if test="${requestScope.message ne null}">
                                 <li>
-                                    <c:out value="${messageText}"></c:out>
+                                    <c:out value="${messageText}"/>
                                 </li>
                             </c:if>
                             <li>

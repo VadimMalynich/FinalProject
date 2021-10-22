@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
@@ -15,8 +16,29 @@ public class Controller extends HttpServlet {
 
     private final CommandProvider provider = new CommandProvider();
 
+    private File uploadFilePath;
+
     public Controller() {
         super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        // Configure uploadFilePath.
+        String uploadFilePathParam = getServletConfig().getInitParameter("uploadFilePath");
+        if (uploadFilePathParam == null) {
+            throw new ServletException("MyServlet 'uploadFilePath' is not configured.");
+        }
+        uploadFilePath = new File(uploadFilePathParam);
+        if (!uploadFilePath.exists()) {
+            throw new ServletException("MyServlet 'uploadFilePath' does not exist.");
+        }
+        if (!uploadFilePath.isDirectory()) {
+            throw new ServletException("MyServlet 'uploadFilePath' is not a directory.");
+        }
+        if (!uploadFilePath.canWrite()) {
+            throw new ServletException("MyServlet 'uploadFilePath' is not writeable.");
+        }
     }
 
     @Override
@@ -38,7 +60,7 @@ public class Controller extends HttpServlet {
         name = request.getParameter("command");
         command = provider.takeCommand(name);
 
-        command.execute(request, response);
+        command.execute(request, response, uploadFilePath);
     }
 
 }

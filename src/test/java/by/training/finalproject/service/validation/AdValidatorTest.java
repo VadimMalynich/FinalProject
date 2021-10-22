@@ -76,6 +76,7 @@ public class AdValidatorTest {
         return new Object[][]{
                 {"trousers1.png"},
                 {"snickers.jpeg"},
+                {null},
                 {"T-shirt_new.jpg"}
         };
     }
@@ -84,7 +85,6 @@ public class AdValidatorTest {
     public Object[][] createDataForValidatePictureNegative() {
         return new Object[][]{
                 {""},
-                {null},
                 {"daslodiu kwhjkld nwfhk ewbkfgyuwiofejwehfwe6f sd5f98 6s56wq5d 6as4 5d46qw849d46s4d 89wq46sa489d6sd48wq5d4as48das54d8as4 5as4d 8wq5d4a8s7w984d5a6s48d8adsajdytasuygdysaf sagyg fdyuqwdgyqud agsduy hsaytudgsagytdwghqdyuahdgsajhdg gdy uqwddqyfdsa wdahsjkdl lksad)DWQ)_@#_QW_= as"},
         };
     }

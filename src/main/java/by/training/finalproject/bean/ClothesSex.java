@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum ClothesSex implements Serializable {
     MAN(0), WOMAN(1), UNISEX(2), CHILD(3);
-    private Integer value;
+    private final Integer value;
 
     ClothesSex(Integer value) {
         this.value = value;

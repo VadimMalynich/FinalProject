@@ -22,6 +22,19 @@ public class CommandProvider {
         commands.put(CommandName.LIKE_AD, new LikeAd());
         commands.put(CommandName.GO_TO_ADD_AD_PAGE, new GoToAddAdPage());
         commands.put(CommandName.ADD_AD, new AddAdInfo());
+        commands.put(CommandName.GO_TO_USER_PROFILE_PAGE, new GoToUserProfilePage());
+        commands.put(CommandName.DELETE_AD, new DeleteAdInfo());
+        commands.put(CommandName.GO_TO_EDIT_AD_PAGE, new GoToEditAddPage());
+        commands.put(CommandName.EDIT_AD, new EditAdInfo());
+        commands.put(CommandName.ADD_CATEGORY, new AddClothesType());
+        commands.put(CommandName.DELETE_CATEGORY, new DeleteClothesType());
+        commands.put(CommandName.EDIT_CATEGORY, new EditClothesType());
+        commands.put(CommandName.GO_TO_TYPES_PAGE, new GoToTypesPage());
+        commands.put(CommandName.GO_TO_USERS_PAGE, new GoToUsersPage());
+        commands.put(CommandName.DELETE_USER, new DeleteUser());
+        commands.put(CommandName.GO_TO_EDIT_USER_PAGE, new GoToEditUserPage());
+        commands.put(CommandName.EDIT_USER, new EditUser());
+        commands.put(CommandName.DELETE_COMMENT, new DeleteComment());
     }
 
     public Command takeCommand(String name) {

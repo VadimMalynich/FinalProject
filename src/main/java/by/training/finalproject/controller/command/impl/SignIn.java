@@ -2,7 +2,6 @@ package by.training.finalproject.controller.command.impl;
 
 import by.training.finalproject.bean.User;
 import by.training.finalproject.controller.command.Command;
-import by.training.finalproject.service.MessageManager;
 import by.training.finalproject.service.ServiceException;
 import by.training.finalproject.service.ServiceProvider;
 import by.training.finalproject.service.UserService;
@@ -13,13 +12,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 public class SignIn implements Command {
 	private static final Logger userLogger = LogManager.getLogger(SignIn.class);
 
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		String login = request.getParameter("login");
 		String password = request.getParameter("password");

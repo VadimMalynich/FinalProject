@@ -14,13 +14,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 public class AddComment implements Command {
     private static final Logger userLogger = LogManager.getLogger(AddComment.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
         AdInfo adInfo = (AdInfo) session.getAttribute("adPageInfo");
         User user = (User) session.getAttribute("user");

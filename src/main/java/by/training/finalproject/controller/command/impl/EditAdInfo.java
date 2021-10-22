@@ -5,14 +5,13 @@ import by.training.finalproject.controller.command.Command;
 import by.training.finalproject.service.AdInfoService;
 import by.training.finalproject.service.ServiceException;
 import by.training.finalproject.service.ServiceProvider;
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,30 +20,33 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class AddAdInfo implements Command {
-    private static final Logger userLogger = LogManager.getLogger(AddAdInfo.class);
+public class EditAdInfo implements Command {
+    private static final Logger userLogger = LogManager.getLogger(EditAdInfo.class);
     private static final String SAVE_DIR = "resources/images/adsPhoto";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
-
         HttpSession session = request.getSession();
+
+        AdInfo previousAd = (AdInfo) session.getAttribute("editAd");
+
+        Integer editAdIdInfo = (Integer) session.getAttribute("editAdIdInfo");
+        Integer editType = Integer.valueOf(request.getParameter("editType"));
+        String editTopic = request.getParameter("editTopic");
+        String editMaterial = request.getParameter("editMaterial");
+        Integer editSize = Integer.valueOf(request.getParameter("editSize"));
+        Integer editSex = Integer.valueOf(request.getParameter("editSex"));
+        String editDescription = request.getParameter("editDescription");
+        ClothesSize size = ClothesSize.getByCode(editSize);
+        ClothesSex sex = ClothesSex.getByCode(editSex);
+
         User user = (User) session.getAttribute("user");
-
-        Integer addType = Integer.valueOf(request.getParameter("addType"));
-        String addTopic = request.getParameter("addTopic");
-        String addMaterial = request.getParameter("addMaterial");
-        Integer addSize = Integer.valueOf(request.getParameter("addSize"));
-        Integer addSex = Integer.valueOf(request.getParameter("addSex"));
-        String addDescription = request.getParameter("addDescription");
-        ClothesSize size = ClothesSize.getByCode(addSize);
-        ClothesSex sex = ClothesSex.getByCode(addSex);
-
-        Object fileObject = request.getAttribute("addPicture");
+        Object fileObject = request.getAttribute("editPicture");
         Ad ad = null;
 
+
         if (fileObject == null || fileObject instanceof FileUploadException) {
-            ad = new Ad(addTopic, addMaterial, size, sex, addDescription);
+            ad = new Ad(editTopic, editMaterial, size, sex, editDescription, previousAd.getAd().getPicture());
         } else {
             FileItem fileItem = (FileItem) fileObject;
             String uploadAppPath = request.getServletContext().getRealPath(SAVE_DIR);
@@ -64,25 +66,34 @@ public class AddAdInfo implements Command {
                 // Write uploaded file to local file.
                 fileItem.write(file);
                 Files.copy(file.toPath(), new File(uploadAppPath + File.separator + file.getName()).toPath());
-                ad = new Ad(addTopic, addMaterial, size, sex, addDescription, file.getName());
+                ad = new Ad(editTopic, editMaterial, size, sex, editDescription, file.getName());
             } catch (Exception e) {
                 // Can be thrown by uniqueFile() and FileItem#write().
                 userLogger.error(e);
             }
         }
 
-
-        AdInfo adInfo = new AdInfo(user, addType, ad);
-
         ServiceProvider provider = ServiceProvider.getInstance();
         AdInfoService adsInfoService = provider.getAdInfoService();
 
+        AdInfo adInfo = new AdInfo(editAdIdInfo, previousAd.getUserInfo(), editType, ad);
+
         try {
-            adsInfoService.add(adInfo);
-            response.sendRedirect("Controller?command=go_to_home_page&message=message.addAd.complete");
+            adsInfoService.edit(adInfo);
+            session.removeAttribute("editAd");
+            session.removeAttribute("editAdIdInfo");
+            if (user.getRole().getValue() == 0) {
+                response.sendRedirect("Controller?command=go_to_home_page&message=message.editAd.complete");
+            } else {
+                response.sendRedirect("Controller?command=go_to_user_profile_page&message=message.editAd.complete");
+            }
         } catch (ServiceException e) {
-            userLogger.error(e);
-            response.sendRedirect("Controller?command=go_to_add_ad_page&message=message.add.unsuccessfully");
+            userLogger.info(e);
+            if (user.getRole().getValue() == 0) {
+                response.sendRedirect("Controller?command=go_to_home_page&message=message.edit.unsuccessfully");
+            } else {
+                response.sendRedirect("Controller?command=go_to_edit_ad_page&message=message.edit.unsuccessfully");
+            }
         }
     }
 }

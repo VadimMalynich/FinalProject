@@ -16,6 +16,7 @@
 $('#signUpButton').prop('disabled', true);
 $("#divCheckPasswordsNotMatch").hide();
 $("#divCheckPasswordsMatch").hide();
+
 function checkPasswordMatch() {
     let password = $("#newPassword").val();
     let confirmPassword = $("#confirmPassword").val();
@@ -78,26 +79,33 @@ $(function () {
                     break;
             }
         }).show();
-        switch (selectedRegion) {
-            case'1':
-                document.getElementById('city').value = '1'
-                break;
-            case '2':
-                document.getElementById('city').value = '19'
-                break;
-            case '3':
-                document.getElementById('city').value = '37'
-                break;
-            case '4':
-                document.getElementById('city').value = '53'
-                break;
-            case '5':
-                document.getElementById('city').value = '68'
-                break;
-            case '6':
-                document.getElementById('city').value = '93'
-                break;
+        let e = document.getElementById('city');
+        let userCity = e.options[e.selectedIndex].value;
+        if (userCity !== 1) {
+            document.getElementById('city').value = userCity;
+        } else {
+            switch (selectedRegion) {
+                case'1':
+                    document.getElementById('city').value = '1'
+                    break;
+                case '2':
+                    document.getElementById('city').value = '19'
+                    break;
+                case '3':
+                    document.getElementById('city').value = '37'
+                    break;
+                case '4':
+                    document.getElementById('city').value = '53'
+                    break;
+                case '5':
+                    document.getElementById('city').value = '68'
+                    break;
+                case '6':
+                    document.getElementById('city').value = '93'
+                    break;
+            }
         }
+
     };
 
     let region = $region.val();

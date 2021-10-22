@@ -47,6 +47,15 @@ public interface AdInfoService {
     AdInfo getAdInfo(Integer id) throws ServiceException;
 
     /**
+     * Method for getting user ads
+     *
+     * @param userId id of user
+     * @return {@code List<AdInfo>} with user ads
+     * @throws ServiceException when the error occurred on the dao layer
+     */
+    List<AdInfo> getUserAds(Integer userId) throws ServiceException;
+
+    /**
      * Method adding like to ad if like don't pressed, otherwise deleting like from ad
      *
      * @param adId   id of ad on which need add/delete like

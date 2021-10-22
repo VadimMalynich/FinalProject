@@ -45,9 +45,7 @@ public class ClothesTypeServiceImpl implements ClothesTypeService {
 
     @Override
     public void add(ClothesType clothesType) throws ServiceException {
-        if (clothesType == null || clothesType.getCategory() == null || EMPTY_STRING.equals(clothesType.getCategory())) {
-            throw new ServiceException("Can not add new clothes type.");
-        }
+        validateData(clothesType);
         try {
             ClothesTypeDao clothesTypeDao = DaoFactory.getInstance().getClothesTypeDao();
             Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
@@ -92,9 +90,7 @@ public class ClothesTypeServiceImpl implements ClothesTypeService {
 
     @Override
     public void edit(ClothesType clothesType) throws ServiceException {
-        if (clothesType == null || clothesType.getCategory() == null || EMPTY_STRING.equals(clothesType.getCategory())) {
-            throw new ServiceException("Can not edit clothes type.");
-        }
+        validateData(clothesType);
         try {
             ClothesTypeDao clothesTypeDao = DaoFactory.getInstance().getClothesTypeDao();
             Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
@@ -136,5 +132,17 @@ public class ClothesTypeServiceImpl implements ClothesTypeService {
             throw new ServiceException(exception);
         }
         return str;
+    }
+
+    private void validateData(ClothesType clothesType) throws ServiceException {
+        if (clothesType == null) {
+            throw new ServiceException("Clothes type doesn't exist");
+        }
+        if (clothesType.getCategory() == null || "".equals(clothesType.getCategory())) {
+            throw new ServiceException("Wrong category name");
+        }
+        if (clothesType.getCategory().length() < 4) {
+            throw new ServiceException("Incorrect category name");
+        }
     }
 }

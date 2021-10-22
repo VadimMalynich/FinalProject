@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class GoToAdPage implements Command {
     private static final Logger userLogger = LogManager.getLogger(GoToAdPage.class);
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.setAttribute("page", "Controller?command=go_to_ad_page&adIdInfo=" + request.getParameter("adIdInfo"));
         if (request.getParameter("message") != null) {

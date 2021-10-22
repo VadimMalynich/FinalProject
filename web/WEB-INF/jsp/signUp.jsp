@@ -25,6 +25,7 @@
     <!-- Locale-->
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="langs.labels" var="loc"/>
+
     <fmt:message bundle="${loc}" key="signUp.button" var="signUp"/>
     <fmt:message bundle="${loc}" key="signIn.button" var="signIn"/>
 
@@ -58,10 +59,12 @@
 
     <fmt:message bundle="${loc}" key="passwordsEquals" var="match"/>
     <fmt:message bundle="${loc}" key="passwordsNotEquals" var="notMatch"/>
-    <c:if test="${message ne null}">
-        <fmt:message bundle="${loc}" key="${message}" var="messageText"/>
-    </c:if>
+
     <fmt:message bundle="${loc}" key="page.signUp" var="pageTitle"/>
+
+    <c:if test="${requestScope.message ne null}">
+        <fmt:message bundle="${loc}" key="${requestScope.message}" var="messageText"/>
+    </c:if>
 
     <!-- Page Title -->
     <title>${pageTitle}</title>
@@ -93,7 +96,7 @@
                     </div>
                     <div class="main-menu">
                         <ul>
-                            <c:if test="${message ne null}">
+                            <c:if test="${requestScope.message ne null}">
                                 <li>
                                     <c:out value="${messageText}"/>
                                 </li>
@@ -276,7 +279,7 @@
                                     <div class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></div>
                                     <div class="form-select" id="default-select2">
                                         <select name="signUpCity" id="city" class="nice-select list">
-                                            <c:forEach var="city" items="${citiesList}">
+                                            <c:forEach var="city" items="${sessionScope.citiesList}">
                                                 <option value="${city.id}" class="option">${city.name}</option>
                                             </c:forEach>
                                         </select>

@@ -28,14 +28,6 @@ public class ClothesType extends Entity {
         this.count = count;
     }
 
-    public Integer getId() {
-        return super.getId();
-    }
-
-    public void setId(Integer id) {
-        super.setId(id);
-    }
-
     public String getCategory() {
         return category;
     }
