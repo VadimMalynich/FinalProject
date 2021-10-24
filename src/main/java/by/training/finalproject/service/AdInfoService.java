@@ -1,6 +1,7 @@
 package by.training.finalproject.service;
 
 import by.training.finalproject.bean.AdInfo;
+import by.training.finalproject.bean.User;
 
 import java.util.List;
 
@@ -54,6 +55,26 @@ public interface AdInfoService {
      * @throws ServiceException when the error occurred on the dao layer
      */
     List<AdInfo> getUserAds(Integer userId) throws ServiceException;
+
+    /**
+     * Method for search ads by ad topic
+     *
+     * @param user user info
+     * @param flag {@code boolean} value for define how to search ads
+     * @param text the text that the user entered for the search
+     * @return {@code List<AdInfo>} with ads that satisfy the condition
+     * @throws ServiceException when the error occurred on the dao layer
+     */
+    List<AdInfo> searchAds(String text, boolean flag, User user) throws ServiceException;
+
+    /**
+     * Method for filter ads by clothes category
+     *
+     * @param typeId id of clothes types
+     * @return {@code List<AdInfo>} with ads that satisfy the condition
+     * @throws ServiceException when the error occurred on the dao layer
+     */
+    List<AdInfo> filterByType(Integer typeId) throws ServiceException;
 
     /**
      * Method adding like to ad if like don't pressed, otherwise deleting like from ad

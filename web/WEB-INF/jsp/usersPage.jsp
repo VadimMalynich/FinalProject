@@ -11,21 +11,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/animate-3.7.0.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/font-awesome-4.7.0.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/fonts/flat-icon/flaticon.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-4.1.3.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/owl-carousel.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/nice-select.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="<c:url value="/resources/images/logo/favicon.png"/>" type="image/x-icon">
 
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
@@ -53,6 +40,7 @@
     <title>${usersButton}</title>
 </head>
 <body>
+<c:import url="parts/header.jsp"/>
 
 <!-- Preloader Starts -->
 <div class="preloader">
@@ -189,12 +177,20 @@
                                 </c:if>
                             </div>
                             <div class="visit">
-                                <a href="Controller?command=go_to_edit_user_page&userId=${user.id}"
-                                   style="margin-left: 50px; color: #0b2e13">
-                                    <em class="fa fa-edit fa-2x"></em></a>
-                                <a href="Controller?command=delete_user&deleteUserId=${user.id}"
-                                   style="margin-left: 15px; color: #0b2e13">
-                                    <em class="fa fa-close fa-2x"></em></a>
+                                <button type="button" style="margin-left: 50px;">
+                                    <a href="Controller?command=go_to_edit_user_page&userId=${user.id}"
+                                       style="color: #0b2e13">
+                                        <em class="fa fa-edit fa-2x"></em></a>
+                                </button>
+                                <form action="Controller" method="post" style="display: inherit">
+                                    <input type="hidden" name="command" value="delete_user">
+                                    <input type="hidden" name="deleteUserId" value="${user.id}">
+                                    <div class="serial">
+                                        <button type="submit">
+                                            <em class="fa fa-close fa-2x"></em></a>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </c:forEach>
@@ -206,15 +202,10 @@
 </c:if>
 <!-- End Align Area -->
 
+<div id="wrapper"></div>
 
-<!-- Javascript -->
-<script src="<c:url value="/resources/js/vendor/jquery-2.2.4.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/bootstrap-4.1.3.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/wow.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/owl-carousel.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/jquery.nice-select.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/ion.rangeSlider.js"/>"></script>
-<script src="<c:url value="/resources/js/main.js"/>"></script>
+<!-- Footer Area -->
+<c:import url="parts/footer.jsp"/>
 </body>
 </html>
 

@@ -4,7 +4,12 @@
 body {
     color: #777;
     font-family: "Open Sans", sans-serif;
-    font-weight: 400
+    font-weight: 400;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* высота веб-страницы больше или равна высоте окна браузера */
+    margin: 0;
 }
 
 h1 {
@@ -1198,7 +1203,7 @@ input:focus, textarea:focus {
 }
 
 .footer-copyright {
-    margin-top: 70px
+    margin-top: 20px
 }
 
 .footer-copyright .color {
@@ -3606,6 +3611,10 @@ form .template-btn {
     padding-bottom: 280px
 }
 
+.section-padding5 {
+    padding: 40px 0
+}
+
 .section-top {
     margin-bottom: 80px
 }
@@ -3634,4 +3643,10 @@ form .template-btn {
 
 .hidden{
     display: none;
+}
+
+#wrapper{
+    flex: 1; /* если содержимое body меньше высоты окна, то section будет растянут до нужной величины */
+    white-space: pre-line;
+    -ms-flex-preferred-size: auto;
 }

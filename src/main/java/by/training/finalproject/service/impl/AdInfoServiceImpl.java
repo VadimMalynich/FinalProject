@@ -205,6 +205,82 @@ public class AdInfoServiceImpl implements AdInfoService {
     }
 
     @Override
+    public List<AdInfo> searchAds(String text, boolean flag, User user) throws ServiceException {
+        if (text == null || "".equals(text)) {
+            throw new ServiceException("Wrong search text");
+        }
+        if (!flag && (user == null || user.getId() < 1)) {
+            throw new ServiceException("Wrong user id");
+        }
+        List<AdInfo> list;
+        try {
+            text = "%" + text + "%";
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            AdDao adDao = daoFactory.getAdInfoDao();
+            CommentDao commentDao = daoFactory.getCommentDao();
+            Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
+            try {
+                transaction.initTransaction(adDao, commentDao);
+                if (flag) {
+                    list = adDao.searchAds(text, flag, null);
+                } else {
+                    list = adDao.searchAds(text, flag, user.getId());
+                }
+                if (!list.isEmpty()) {
+                    for (AdInfo adInfo : list) {
+                        adInfo.getAd().setPicture(DIR_PATH + adInfo.getAd().getPicture());
+                        adInfo.setLikesCount(adDao.getLikesCount(adInfo.getId()));
+                        adInfo.setCommentsCount(commentDao.getCommentCount(adInfo.getId()));
+                    }
+                }
+                transaction.commit();
+            } catch (DaoException | ConnectionPoolException e) {
+                transaction.rollback();
+                throw new ServiceException(e);
+            } finally {
+                transaction.endTransaction();
+            }
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
+        }
+        return list;
+    }
+
+    @Override
+    public List<AdInfo> filterByType(Integer typeId) throws ServiceException {
+        if (typeId == null || typeId < 1) {
+            throw new ServiceException("Wrong type id");
+        }
+        List<AdInfo> list;
+        try {
+            DaoFactory daoFactory = DaoFactory.getInstance();
+            AdDao adDao = daoFactory.getAdInfoDao();
+            CommentDao commentDao = daoFactory.getCommentDao();
+            Transaction transaction = TransactionFactory.getInstance().getEntityTransaction();
+            try {
+                transaction.initTransaction(adDao, commentDao);
+                list = adDao.filterByType(typeId);
+                if (!list.isEmpty()) {
+                    for (AdInfo adInfo : list) {
+                        adInfo.getAd().setPicture(DIR_PATH + adInfo.getAd().getPicture());
+                        adInfo.setLikesCount(adDao.getLikesCount(adInfo.getId()));
+                        adInfo.setCommentsCount(commentDao.getCommentCount(adInfo.getId()));
+                    }
+                }
+                transaction.commit();
+            } catch (DaoException | ConnectionPoolException e) {
+                transaction.rollback();
+                throw new ServiceException(e);
+            } finally {
+                transaction.endTransaction();
+            }
+        } catch (DaoException exception) {
+            throw new ServiceException(exception);
+        }
+        return list;
+    }
+
+    @Override
     public void changeLikesCounter(Integer adId, Integer userId) throws ServiceException {
         if (adId == null || adId < 1 || userId == null || userId < 1) {
             throw new ServiceException("Wrong user or ad id");

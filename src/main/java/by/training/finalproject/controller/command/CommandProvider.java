@@ -1,11 +1,15 @@
 package by.training.finalproject.controller.command;
 
 import by.training.finalproject.controller.command.impl.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
+    private static final Logger userLogger = LogManager.getLogger(CommandProvider.class);
+
     private Map<CommandName, Command> commands = new HashMap<>();
 
     public CommandProvider() {
@@ -35,13 +39,23 @@ public class CommandProvider {
         commands.put(CommandName.GO_TO_EDIT_USER_PAGE, new GoToEditUserPage());
         commands.put(CommandName.EDIT_USER, new EditUser());
         commands.put(CommandName.DELETE_COMMENT, new DeleteComment());
+        commands.put(CommandName.SEARCH_ADS, new SearchAds());
+        commands.put(CommandName.FILTER_ADS, new FilterAdsByType());
+        commands.put(CommandName.WRONG_REQUEST, new WrongRequest());
     }
 
     public Command takeCommand(String name) {
         CommandName commandName;
+        Command command;
+        try{
+            commandName = CommandName.valueOf(name.toUpperCase());
+            command = commands.get(commandName);
+        }catch (IllegalArgumentException | NullPointerException e){
+            String errorMessage = "Wrong command: " + name;
+            userLogger.debug(errorMessage);
+            command = commands.get(CommandName.WRONG_REQUEST);
+        }
 
-        commandName = CommandName.valueOf(name.toUpperCase());
-
-        return commands.get(commandName);
+        return command;
     }
 }

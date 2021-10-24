@@ -11,19 +11,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/animate-3.7.0.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/font-awesome-4.7.0.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/fonts/flat-icon/flaticon.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-4.1.3.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/owl-carousel.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/nice-select.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="<c:url value="/resources/images/logo/favicon.png"/>" type="image/x-icon">
 
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
@@ -49,6 +38,7 @@
     <title>${assortment}</title>
 </head>
 <body>
+<c:import url="parts/header.jsp"/>
 
 <!-- Preloader Starts -->
 <div class="preloader">
@@ -152,7 +142,7 @@
                                 <div class="serial">ID</div>
                                 <div class="country">${typeLabel}</div>
                                 <div class="country">${countLabel}</div>
-                                <div class="country"></div>
+                                <div class="percentage"></div>
                             </div>
                             <c:forEach var="type" items="${sessionScope.clothesTypeList}">
                                 <div class="table-row">
@@ -171,13 +161,16 @@
                                                    style="margin-right: 15px" required>
                                         </div>
                                         <div class="country">${type.count}</div>
-                                        <div class="country">
+                                        <div class="serial">
                                             <button type="submit"><em class="fa fa-save fa-2x"></em></button>
-                                            <button type="button" style="margin-left: 15px">
-                                                <a href="Controller?command=delete_category&deleteTypeId=${type.id}"
-                                                   style="color: #0b2e13">
-                                                    <em class="fa fa-close fa-2x"></em>
-                                                </a>
+                                        </div>
+                                    </form>
+                                    <form action="Controller" method="post" style="display: inherit">
+                                        <input type="hidden" name="command" value="delete_category">
+                                        <input type="hidden" name="deleteTypeId" value="${type.id}">
+                                        <div class="serial">
+                                            <button type="submit">
+                                                <em class="fa fa-close fa-2x"></em>
                                             </button>
                                         </div>
                                     </form>
@@ -194,7 +187,7 @@
                                                name="addCategory" style="margin-right: 15px" required>
                                     </div>
                                     <div class="country"></div>
-                                    <div class="country">
+                                    <div class="percentage">
                                         <button type="submit"><em class="fa fa-plus fa-2x"></em></button>
                                     </div>
                                 </form>
@@ -242,14 +235,11 @@
 </c:choose>
 <!-- End Align Area -->
 
-<!-- Javascript -->
-<script src="<c:url value="/resources/js/vendor/jquery-2.2.4.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/bootstrap-4.1.3.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/wow.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/owl-carousel.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/jquery.nice-select.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/ion.rangeSlider.js"/>"></script>
-<script src="<c:url value="/resources/js/main.js"/>"></script>
+<div id="wrapper"></div>
+
+<!-- Footer Area -->
+<c:import url="parts/footer.jsp"/>
+
 </body>
 </html>
 

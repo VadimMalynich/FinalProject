@@ -11,6 +11,14 @@ import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Hash passwords for storage, and test passwords against password tokens.
+ * <p>
+ * Instances of this class can be used concurrently by multiple threads.
+ *
+ * @author erickson
+ * @see <a href="http://stackoverflow.com/a/2861125/3474">StackOverflow</a>
+ */
 public final class PBKDF2Hasher {
 
     /**
@@ -49,7 +57,7 @@ public final class PBKDF2Hasher {
     }
 
     private static int iterations(int cost) {
-        if ((cost < 0) || (cost > 30)){
+        if ((cost < 0) || (cost > 30)) {
             throw new IllegalArgumentException("cost: " + cost);
         }
         return 1 << cost;
@@ -78,7 +86,7 @@ public final class PBKDF2Hasher {
      */
     public boolean checkPassword(char[] password, String token) {
         Matcher m = layout.matcher(token);
-        if (!m.matches()){
+        if (!m.matches()) {
             throw new IllegalArgumentException("Invalid token format");
         }
         int iterations = iterations(Integer.parseInt(m.group(1)));

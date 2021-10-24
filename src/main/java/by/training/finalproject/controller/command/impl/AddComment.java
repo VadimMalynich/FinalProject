@@ -19,6 +19,7 @@ import java.io.IOException;
 
 public class AddComment implements Command {
     private static final Logger userLogger = LogManager.getLogger(AddComment.class);
+    private static final String CONTROLLER = "Controller?command=go_to_ad_page&adIdInfo=";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
@@ -26,7 +27,7 @@ public class AddComment implements Command {
         AdInfo adInfo = (AdInfo) session.getAttribute("adPageInfo");
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            response.sendRedirect("Controller?command=go_to_ad_page&adIdInfo=" + adInfo.getId() + "&message=message.error.comment");
+            response.sendRedirect(CONTROLLER + adInfo.getId() + "&message=message.error.comment");
             return;
         }
         session.removeAttribute("commentsList");
@@ -40,13 +41,13 @@ public class AddComment implements Command {
 
         try {
             commentService.add(comment);
-            response.sendRedirect("Controller?command=go_to_ad_page&adIdInfo=" + adInfo.getId() + "&message=message.addComment.complete");
+            response.sendRedirect(CONTROLLER + adInfo.getId() + "&message=message.addComment.complete");
         } catch (ServiceException e) {
             userLogger.info(e);
             if (e.getMessage().equals("Wrong comment text") || e.getMessage().equals("Wrong id")) {
-                response.sendRedirect("Controller?command=go_to_ad_page&adIdInfo=" + adInfo.getId() + "&message=message.error.commentAdd");
+                response.sendRedirect(CONTROLLER + adInfo.getId() + "&message=message.error.commentAdd");
             } else {
-                response.sendRedirect("Controller?command=go_to_ad_page&adIdInfo=" + adInfo.getId() + "&message=message.error.server");
+                response.sendRedirect(CONTROLLER + adInfo.getId() + "&message=message.error.server");
             }
         }
     }

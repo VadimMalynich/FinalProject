@@ -19,36 +19,33 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class GoToHomePage implements Command {
-    private static final Logger userLogger = LogManager.getLogger(GoToHomePage.class);
+public class FilterAdsByType implements Command {
+    private static final Logger userLogger = LogManager.getLogger(FilterAdsByType.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.setAttribute("page", "Controller?command=go_to_home_page");
-        if (request.getParameter("message") != null) {
-            request.setAttribute("message", request.getParameter("message"));
-        }
-        if (request.getParameter("locale") != null) {
-            session.setAttribute("locale", request.getParameter("locale"));
-        }
+
+        Integer typeId = Integer.valueOf(request.getParameter("filterIdType"));
+        session.setAttribute("page", "Controller?command=filter_ads&filterIdType=" + typeId);
         ServiceProvider provider = ServiceProvider.getInstance();
         AdInfoService adInfoService = provider.getAdInfoService();
         ClothesTypeService clothesTypeService = provider.getClothesTypeService();
 
+
         try {
-            List<AdInfo> adInfoList = adInfoService.getAll();
+            List<AdInfo> filterAdsList = adInfoService.filterByType(typeId);
             List<ClothesType> clothesTypeList = clothesTypeService.getAll();
-            session.setAttribute("adsList", adInfoList);
+            String category = clothesTypeService.getClothesCategory(typeId);
+            session.setAttribute("filterAdsList", filterAdsList);
             session.setAttribute("categoryCountList", clothesTypeList);
+            session.setAttribute("filterClothesType", category);
+            session.removeAttribute("adsList");
             session.removeAttribute("searchAdsList");
             session.removeAttribute("searchAd");
-            session.removeAttribute("filterClothesType");
-            session.removeAttribute("filterAdsList");
         } catch (ServiceException e) {
             userLogger.error(e);
         }
-
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
         requestDispatcher.forward(request, response);
     }

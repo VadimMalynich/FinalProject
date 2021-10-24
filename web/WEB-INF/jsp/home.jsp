@@ -11,28 +11,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <!-- Favicon -->
     <link rel="shortcut icon" href="<c:url value="/resources/images/logo/favicon.png"/>" type="image/x-icon">
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-codes.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-embedded.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-ie7.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-ie7-codes.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/animation.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/animate-3.7.0.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/font-awesome-4.7.0.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/fonts/flat-icon/flaticon.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-4.1.3.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/owl-carousel.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/nice-select.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
 
     <!-- Locale -->
     <fmt:setLocale value="${sessionScope.locale}"/>
@@ -71,6 +51,8 @@
     <title>${pageTitle}</title>
 </head>
 <body>
+<c:import url="parts/header.jsp"/>
+
 <!-- Preloader Starts -->
 <div class="preloader">
     <div class="spinner"></div>
@@ -179,16 +161,18 @@
         <div class="row">
             <div class="col-md-6 offset-md-3">
                 <c:choose>
-                    <c:when test="${not empty filterAdsInfoList}">
-                        <h2>${clothesTypeMessage} "${filterClothesType}"</h2>
+                    <c:when test="${sessionScope.filterClothesType ne null}">
+                        <h2>${clothesTypeMessage} "${sessionScope.filterClothesType}"</h2>
                     </c:when>
-                    <c:when test="${not empty searchAdsInfoList}">
-                        <h2>${searchResults} ${searchAd}</h2>
+                    <c:when test="${sessionScope.searchAd ne null}">
+                        <h2>${searchResults} ${sessionScope.searchAd}</h2>
                     </c:when>
-                    <c:when test="${empty adsList}">
+                    <c:when test="${empty sessionScope.adsList}">
                         <h2>${emptyAds}</h2>
                         <p>${emptyAdsContinue}</p>
-                        <a href="Controller?command=go_to_add_ad_page" class="template-btn">${addButton}</a>
+                        <c:if test="${sessionScope.user.role.value eq 1}">
+                            <a href="Controller?command=go_to_add_ad_page" class="template-btn">${addButton}</a>
+                        </c:if>
                     </c:when>
                 </c:choose>
             </div>
@@ -286,7 +270,7 @@
                     <div class="col-lg-4 sidebar">
                         <div class="single-widget search-widget">
                             <form class="example" action="Controller" method="post" style="margin:auto;max-width:300px">
-                                <input type="hidden" name="command" value="gotosearchadpage"/>
+                                <input type="hidden" name="command" value="search_ads"/>
                                 <input type="text" placeholder="${searchPlaceholder}" name="searchAd"
                                        onfocus="this.placeholder = ''"
                                        onblur="this.placeholder = '${searchPlaceholder}'" required>
@@ -299,7 +283,7 @@
                                 <ul>
                                     <c:forEach var="type" items="${sessionScope.categoryCountList}">
                                         <li>
-                                            <a href="Controller?command=gotofilteradpage&filterIDType=${type.id}"
+                                            <a href="Controller?command=filter_ads&filterIdType=${type.id}"
                                                class="justify-content-between align-items-center d-flex">
                                                 <h6>${type.category}</h6>
                                                 <span>${type.count}</span>
@@ -314,61 +298,81 @@
             </div>
         </section>
     </c:when>
-    <c:when test="${not empty filterAdsInfoList}">
+    <c:when test="${not empty sessionScope.filterAdsList}">
         <section class="blog-posts-area section-padding">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 post-list blog-post-list">
-                        <c:forEach var="filterAd" items="${filterAdsInfoList}">
+                        <c:forEach var="filterAd" items="${sessionScope.filterAdsList}">
                             <div class="single-post">
-                                <img class="img-fluid" src="${filterAd.picture}" alt="">
+                                <c:choose>
+                                    <c:when test="${sessionScope.user.role.value eq 0}">
+                                        <div class="row">
+                                            <img class="img-fluid" width="80%"
+                                                 src="<c:url value="${filterAd.ad.picture}"/>"
+                                                 alt="">
+                                            <a href="Controller?command=go_to_edit_ad_page&editAdIdInfo=${filterAd.id}"
+                                               style="margin-left: 50px; color: #0b2e13">
+                                                <em class="fa fa-edit fa-2x"></em>
+                                            </a>
+                                            <a href="Controller?command=delete_ad&deleteAdIdInfo=${filterAd.id}"
+                                               style="margin-left: 15px; color: #0b2e13">
+                                                <em class="fa fa-close fa-2x"></em>
+                                            </a>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${sessionScope.user.role.value eq 1 or sessionScope.user == null}">
+                                        <img class="img-fluid" src="<c:url value="${filterAd.ad.picture}"/>" alt="">
+                                    </c:when>
+                                </c:choose>
                                 <ul class="tags">
                                     <li>
-                                        <c:out value="${filterAd.date}"/>
+                                        <c:out value="${filterAd.ad.date}"/>
                                     </li>
                                 </ul>
-                                <a href="Controller?command=gotoadpage&adIDInfo=${filterAd.id}">
+                                <a href="Controller?command=go_to_ad_page&adIdInfo=${filterAd.id}">
                                     <h2>
-                                        <c:out value="${filterAd.topic}"/>
+                                        <c:out value="${filterAd.ad.topic}"/>
                                     </h2>
                                 </a>
-                                <c:if test="${filterAd.description ne null}">
-                                    <p>
-                                        <c:out value="${filterAd.description}"/>
-                                    </p>
-                                </c:if>
+                                <p>
+                                    <c:out value="${filterAd.ad.description}"/>
+                                </p>
                                 <div class="bottom-meta">
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
                                                 <c:choose>
-                                                    <c:when test="${filterAd.likes == 0 || filterAd.likes > 4}">
-                                                        <li><em class="icon-heart-empty"></em> ${filterAd.likes} лайков
+                                                    <c:when test="${filterAd.likesCount == 0 || filterAd.likesCount > 4}">
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em> ${filterAd.likesCount} ${likesFirst}
                                                         </li>
                                                     </c:when>
-                                                    <c:when test="${filterAd.likes == 1}">
-                                                        <li><em class="icon-heart-empty"></em> ${filterAd.likes} лайк
+                                                    <c:when test="${filterAd.likesCount == 1}">
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em> ${filterAd.likesCount} ${likesSecond}
                                                         </li>
                                                     </c:when>
-                                                    <c:when test="${filterAd.likes >= 2 && filterAd.likes <= 4}">
-                                                        <li><em class="icon-heart-empty"></em> ${filterAd.likes} лайка
+                                                    <c:when test="${filterAd.likesCount >= 2 && filterAd.likesCount <= 4}">
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em> ${filterAd.likesCount} ${likesThird}
                                                         </li>
                                                     </c:when>
                                                 </c:choose>
                                                 <c:choose>
                                                     <c:when test="${filterAd.commentsCount == 0 || filterAd.commentsCount > 4}">
-                                                        <li><em class="icon-comment"></em> ${filterAd.commentsCount}
-                                                            Комментариев
+                                                        <li>
+                                                            <em class="icon-comment"></em>${filterAd.commentsCount} ${commentsFirst}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${filterAd.commentsCount == 1}">
-                                                        <li><em class="icon-comment"></em> ${filterAd.commentsCount}
-                                                            Комментарий
+                                                        <li>
+                                                            <em class="icon-comment"></em> ${filterAd.commentsCount} ${commentsSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${filterAd.commentsCount >= 2 && filterAd.commentsCount <= 4}">
-                                                        <li><em class="icon-comment"></em> ${filterAd.commentsCount}
-                                                            Комментария
+                                                        <li>
+                                                            <em class="icon-comment"></em> ${filterAd.commentsCount} ${commentsThird}
                                                         </li>
                                                     </c:when>
                                                 </c:choose>
@@ -382,20 +386,20 @@
                     <div class="col-lg-4 sidebar">
                         <div class="single-widget search-widget">
                             <form class="example" action="Controller" method="post" style="margin:auto;max-width:300px">
-                                <input type="hidden" name="command" value="gotosearchadpage"/>
-                                <input type="text" placeholder="Поиск объявления" name="searchAd"
+                                <input type="hidden" name="command" value="search_ads"/>
+                                <input type="text" placeholder="${searchPlaceholder}" name="searchAd"
                                        onfocus="this.placeholder = ''"
-                                       onblur="this.placeholder = 'Поиск объявления'" required>
+                                       onblur="this.placeholder = '${searchPlaceholder}'" required>
                                 <button type="submit"><em class="fa fa-search"></em></button>
                             </form>
                         </div>
-                        <c:if test="${categoryCountList ne null}">
+                        <c:if test="${sessionScope.categoryCountList ne null}">
                             <div class="single-widget category-widget">
-                                <h4 class="title">Виды одежды</h4>
+                                <h4 class="title">${types}</h4>
                                 <ul>
-                                    <c:forEach var="type" items="${categoryCountList}">
+                                    <c:forEach var="type" items="${sessionScope.categoryCountList}">
                                         <li>
-                                            <a href="Controller?command=gotofilteradpage&filterIDType=${type.typeID}"
+                                            <a href="Controller?command=filter_ads&filterIdType=${type.id}"
                                                class="justify-content-between align-items-center d-flex">
                                                 <h6>${type.category}</h6>
                                                 <span>${type.count}</span>
@@ -410,61 +414,81 @@
             </div>
         </section>
     </c:when>
-    <c:when test="${not empty searchAdsInfoList}">
+    <c:when test="${not empty sessionScope.searchAdsList}">
         <section class="blog-posts-area section-padding">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8 post-list blog-post-list">
-                        <c:forEach var="searchAds" items="${searchAdsInfoList}">
+                        <c:forEach var="searchAd" items="${sessionScope.searchAdsList}">
                             <div class="single-post">
-                                <img class="img-fluid" src="${searchAds.picture}" alt="">
+                                <c:choose>
+                                    <c:when test="${sessionScope.user.role.value eq 0}">
+                                        <div class="row">
+                                            <img class="img-fluid" width="80%"
+                                                 src="<c:url value="${searchAd.ad.picture}"/>"
+                                                 alt="">
+                                            <a href="Controller?command=go_to_edit_ad_page&editAdIdInfo=${searchAd.id}"
+                                               style="margin-left: 50px; color: #0b2e13">
+                                                <em class="fa fa-edit fa-2x"></em>
+                                            </a>
+                                            <a href="Controller?command=delete_ad&deleteAdIdInfo=${searchAd.id}"
+                                               style="margin-left: 15px; color: #0b2e13">
+                                                <em class="fa fa-close fa-2x"></em>
+                                            </a>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${sessionScope.user.role.value eq 1 or sessionScope.user == null}">
+                                        <img class="img-fluid" src="<c:url value="${searchAd.ad.picture}"/>" alt="">
+                                    </c:when>
+                                </c:choose>
                                 <ul class="tags">
                                     <li>
-                                        <c:out value="${searchAds.date}"/>
+                                        <c:out value="${searchAd.ad.date}"/>
                                     </li>
                                 </ul>
-                                <a href="Controller?command=gotoadpage&adIDInfo=${searchAds.id}">
+                                <a href="Controller?command=go_to_ad_page&adIdInfo=${searchAd.id}">
                                     <h2>
-                                        <c:out value="${searchAds.topic}"/>
+                                        <c:out value="${searchAd.ad.topic}"/>
                                     </h2>
                                 </a>
-                                <c:if test="${searchAds.description ne null}">
-                                    <p>
-                                        <c:out value="${searchAds.description}"/>
-                                    </p>
-                                </c:if>
+                                <p>
+                                    <c:out value="${searchAd.ad.description}"/>
+                                </p>
                                 <div class="bottom-meta">
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
                                                 <c:choose>
-                                                    <c:when test="${searchAds.likes == 0 || searchAds.likes > 4}">
-                                                        <li><em class="icon-heart-empty"></em> ${searchAds.likes} лайков
+                                                    <c:when test="${searchAd.likesCount == 0 || searchAd.likesCount > 4}">
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em> ${searchAd.likesCount} ${likesFirst}
                                                         </li>
                                                     </c:when>
-                                                    <c:when test="${searchAds.likes == 1}">
-                                                        <li><em class="icon-heart-empty"></em> ${searchAds.likes} лайк
+                                                    <c:when test="${searchAd.likesCount == 1}">
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em> ${searchAd.likesCount} ${likesSecond}
                                                         </li>
                                                     </c:when>
-                                                    <c:when test="${searchAds.likes >= 2 && searchAds.likes <= 4}">
-                                                        <li><em class="icon-heart-empty"></em> ${searchAds.likes} лайка
+                                                    <c:when test="${searchAd.likesCount >= 2 && searchAd.likesCount <= 4}">
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em> ${searchAd.likesCount} ${likesThird}
                                                         </li>
                                                     </c:when>
                                                 </c:choose>
                                                 <c:choose>
-                                                    <c:when test="${searchAds.commentsCount == 0 || searchAds.commentsCount > 4}">
-                                                        <li><em class="icon-comment"></em> ${searchAds.commentsCount}
-                                                            Комментариев
+                                                    <c:when test="${searchAd.commentsCount == 0 || searchAd.commentsCount > 4}">
+                                                        <li>
+                                                            <em class="icon-comment"></em>${searchAd.commentsCount} ${commentsFirst}
                                                         </li>
                                                     </c:when>
-                                                    <c:when test="${searchAds.commentsCount == 1}">
-                                                        <li><em class="icon-comment"></em> ${searchAds.commentsCount}
-                                                            Комментарий
+                                                    <c:when test="${searchAd.commentsCount == 1}">
+                                                        <li>
+                                                            <em class="icon-comment"></em> ${searchAd.commentsCount} ${commentsSecond}
                                                         </li>
                                                     </c:when>
-                                                    <c:when test="${searchAds.commentsCount >= 2 && searchAds.commentsCount <= 4}">
-                                                        <li><em class="icon-comment"></em> ${searchAds.commentsCount}
-                                                            Комментария
+                                                    <c:when test="${searchAd.commentsCount >= 2 && searchAd.commentsCount <= 4}">
+                                                        <li>
+                                                            <em class="icon-comment"></em> ${searchAd.commentsCount} ${commentsThird}
                                                         </li>
                                                     </c:when>
                                                 </c:choose>
@@ -478,21 +502,20 @@
                     <div class="col-lg-4 sidebar">
                         <div class="single-widget search-widget">
                             <form class="example" action="Controller" method="post" style="margin:auto;max-width:300px">
-                                <input type="hidden" name="command" value="gotosearchadpage"/>
-                                <input type="text" placeholder="Поиск объявления" name="searchAd"
+                                <input type="hidden" name="command" value="search_ads"/>
+                                <input type="text" placeholder="${searchPlaceholder}" name="searchAd"
                                        onfocus="this.placeholder = ''"
-                                       onblur="this.placeholder = 'Поиск объявления'" required>
+                                       onblur="this.placeholder = '${searchPlaceholder}'" required>
                                 <button type="submit"><em class="fa fa-search"></em></button>
                             </form>
                         </div>
-
-                        <c:if test="${categoryCountList ne null}">
+                        <c:if test="${sessionScope.categoryCountList ne null}">
                             <div class="single-widget category-widget">
-                                <h4 class="title">Виды одежды</h4>
+                                <h4 class="title">${types}</h4>
                                 <ul>
-                                    <c:forEach var="type" items="${categoryCountList}">
+                                    <c:forEach var="type" items="${sessionScope.categoryCountList}">
                                         <li>
-                                            <a href="Controller?command=gotofilteradpage&filterIDType=${type.typeID}"
+                                            <a href="Controller?command=filter_ads&filterIdType=${type.id}"
                                                class="justify-content-between align-items-center d-flex">
                                                 <h6>${type.category}</h6>
                                                 <span>${type.count}</span>
@@ -510,13 +533,9 @@
 </c:choose>
 <!-- End blog-posts Area -->
 
-<!-- Javascript -->
-<script src="<c:url value="/resources/js/vendor/jquery-2.2.4.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/bootstrap-4.1.3.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/wow.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/owl-carousel.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/jquery.nice-select.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/ion.rangeSlider.js"/>"></script>
-<script src="<c:url value="/resources/js/main.js"/>"></script>
+<div id="wrapper"></div>
+
+<!-- Footer Area -->
+<c:import url="parts/footer.jsp"/>
 </body>
 </html>

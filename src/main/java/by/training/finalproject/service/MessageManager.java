@@ -3,7 +3,7 @@ package by.training.finalproject.service;
 import java.util.ResourceBundle;
 
 public class MessageManager {
-    private final static ResourceBundle resourceBundle = ResourceBundle.getBundle("langs.labels");
+    private static final ResourceBundle resourceBundle = ResourceBundle.getBundle("langs.labels");
 
     private MessageManager() {
     }

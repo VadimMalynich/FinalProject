@@ -11,12 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdDao extends AbstractDao<Integer, AdInfo> {
-    private static final String GET_ALL_ADS_INFO = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info";
+    private static final String GET_ALL_ADS_INFO = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info ORDER BY date DESC";
     private static final String DELETE_AD = "DELETE FROM ads_info WHERE id=?";
     private static final String ADD_AD = "INSERT INTO ads_info (user_id, category_id, date, topic, material, size, sex, description, picture) VALUES (?,?,?,?,?,?,?,?,?)";
     private static final String EDIT_AD = "UPDATE ads_info SET category_id=?, date=?, topic=?, material=?, size=?, sex=?, description=?, picture=? WHERE id=?";
     private static final String GET_AD_INFO = "SELECT user_id, category_id, date, topic, material, size, sex, description, picture FROM ads_info WHERE id=?";
     private static final String GET_USER_ADS = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info WHERE user_id=?";
+    private static final String SEARCH_ADS = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info where topic like ?";
+    private static final String SEARCH_USER_ADS = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info where user_id=? AND topic like ?";
+    private static final String FILTER_BY_TYPE = "SELECT id, user_id, category_id, date, topic, description, picture FROM ads_info where category_id=?";
     private static final String GET_CLOTHES_TYPE_COUNT = "SELECT * FROM ads_info WHERE category_id=?";
     private static final String DELETE_LIKE = "DELETE FROM likes WHERE ad_info_id=? AND user_id=?";
     private static final String ADD_LIKE = "INSERT INTO likes (ad_info_id, user_id) VALUES (?,?)";
@@ -168,6 +171,78 @@ public class AdDao extends AbstractDao<Integer, AdInfo> {
                 User user = new User(resSet.getInt(2));
                 ClothesType type = new ClothesType(resSet.getInt(3));
                 AdInfo adInfo = new AdInfo(resSet.getInt(1), user, type, ad);
+                ads.add(adInfo);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            close(prSt);
+        }
+        return ads;
+    }
+
+    /**
+     * Method for search ads by ad topic
+     *
+     * @param userId id of user
+     * @param flag   {@code boolean} value for define how to search ads
+     * @param text   the text that the user entered for the search
+     * @return {@code List<AdInfo>} with ads that satisfy the condition
+     * @throws DaoException            if an error occurs when reading data from the database
+     * @throws ConnectionPoolException when an error occurs when closing {@code Statement}
+     */
+    public List<AdInfo> searchAds(String text, boolean flag, Integer userId) throws DaoException, ConnectionPoolException {
+        PreparedStatement prSt = null;
+        ResultSet resSet;
+        List<AdInfo> ads = new ArrayList<>();
+        try {
+            if (flag) {
+                prSt = connection.prepareStatement(SEARCH_ADS);
+                prSt.setString(1, text);
+            } else {
+                prSt = connection.prepareStatement(SEARCH_USER_ADS);
+                prSt.setInt(1, userId);
+                prSt.setString(2, text);
+            }
+            resSet = prSt.executeQuery();
+            while (resSet.next()) {
+                Ad ad = new Ad(resSet.getDate(4), resSet.getString(5), resSet.getString(6),
+                        resSet.getString(7));
+                User userInfo = new User(resSet.getInt(2));
+                ClothesType type = new ClothesType(resSet.getInt(3));
+                AdInfo adInfo = new AdInfo(resSet.getInt(1), userInfo, type, ad);
+                ads.add(adInfo);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            close(prSt);
+        }
+        return ads;
+    }
+
+    /**
+     * Method for filter ads by clothes category
+     *
+     * @param typeId id of clothes types
+     * @return {@code List<AdInfo>} with ads that satisfy the condition
+     * @throws DaoException            if an error occurs when reading data from the database
+     * @throws ConnectionPoolException when an error occurs when closing {@code Statement}
+     */
+    public List<AdInfo> filterByType(Integer typeId) throws DaoException, ConnectionPoolException {
+        PreparedStatement prSt = null;
+        ResultSet resSet;
+        List<AdInfo> ads = new ArrayList<>();
+        try {
+            prSt = connection.prepareStatement(FILTER_BY_TYPE);
+            prSt.setInt(1, typeId);
+            resSet = prSt.executeQuery();
+            while (resSet.next()) {
+                Ad ad = new Ad(resSet.getDate(4), resSet.getString(5), resSet.getString(6),
+                        resSet.getString(7));
+                User userInfo = new User(resSet.getInt(2));
+                ClothesType type = new ClothesType(resSet.getInt(3));
+                AdInfo adInfo = new AdInfo(resSet.getInt(1), userInfo, type, ad);
                 ads.add(adInfo);
             }
         } catch (SQLException e) {

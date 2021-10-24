@@ -11,28 +11,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Favicon -->
     <link rel="shortcut icon" href="<c:url value="/resources/images/logo/favicon.png"/>" type="image/x-icon">
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-codes.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-embedded.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-ie7.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/fontello-ie7-codes.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/animation.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/animate-3.7.0.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/font-awesome-4.7.0.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/fonts/flat-icon/flaticon.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap-4.1.3.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/owl-carousel.min.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/nice-select.css"/>">
-    <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 
     <fmt:setLocale value="${sessionScope.locale}"/>
     <fmt:setBundle basename="langs.labels" var="loc"/>
@@ -63,6 +43,7 @@
     <title>${profile}</title>
 </head>
 <body>
+<c:import url="parts/header.jsp"/>
 
 <!-- Preloader Starts -->
 <div class="preloader">
@@ -252,8 +233,8 @@
                 <div class="col-lg-4 sidebar">
                     <div class="single-widget search-widget">
                         <form class="example" action="Controller" method="post" style="margin:auto;max-width:300px">
-                            <input type="hidden" name="command" value="gotosearchadpage"/>
-                            <input type="text" placeholder="${searchPlaceholder}" name="search2"
+                            <input type="hidden" name="command" value="search_ads"/>
+                            <input type="text" placeholder="${searchPlaceholder}" name="searchAdProfile"
                                    onfocus="this.placeholder = ''"
                                    onblur="this.placeholder = '${searchPlaceholder}'" required>
                             <button type="submit"><em class="fa fa-search"></em></button>
@@ -292,13 +273,9 @@
 </c:if>
 <!-- End blog-posts Area -->
 
-<!-- Javascript -->
-<script src="<c:url value="/resources/js/vendor/jquery-2.2.4.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/bootstrap-4.1.3.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/wow.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/owl-carousel.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/jquery.nice-select.min.js"/>"></script>
-<script src="<c:url value="/resources/js/vendor/ion.rangeSlider.js"/>"></script>
-<script src="<c:url value="/resources/js/main.js"/>"></script>
+<div id="wrapper"></div>
+
+<!-- Footer Area -->
+<c:import url="parts/footer.jsp"/>
 </body>
 </html>

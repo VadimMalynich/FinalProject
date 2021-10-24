@@ -11,10 +11,8 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 public class AddClothesType implements Command {
     private static final Logger userLogger = LogManager.getLogger(AddClothesType.class);

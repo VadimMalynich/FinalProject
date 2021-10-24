@@ -14,7 +14,6 @@ import by.training.finalproject.service.ServiceException;
 import java.util.List;
 
 public class ClothesTypeServiceImpl implements ClothesTypeService {
-    private static final String EMPTY_STRING = "";
 
     @Override
     public List<ClothesType> getAll() throws ServiceException {

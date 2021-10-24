@@ -2,6 +2,7 @@ package by.training.finalproject.controller.command.impl;
 
 import by.training.finalproject.bean.AdInfo;
 import by.training.finalproject.bean.ClothesType;
+import by.training.finalproject.bean.User;
 import by.training.finalproject.controller.command.Command;
 import by.training.finalproject.service.AdInfoService;
 import by.training.finalproject.service.ClothesTypeService;
@@ -19,37 +20,51 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class GoToHomePage implements Command {
-    private static final Logger userLogger = LogManager.getLogger(GoToHomePage.class);
+public class SearchAds implements Command {
+    private static final Logger userLogger = LogManager.getLogger(SearchAds.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.setAttribute("page", "Controller?command=go_to_home_page");
-        if (request.getParameter("message") != null) {
-            request.setAttribute("message", request.getParameter("message"));
+        session.setAttribute("page", "Controller?command=search_ads");
+        String searchRequest;
+        User user = (User) session.getAttribute("user");
+        boolean flag;
+        if (request.getParameter("searchAdProfile") == null) {
+            flag = true;
+            searchRequest = request.getParameter("searchAd");
+        } else {
+            flag = false;
+            searchRequest = request.getParameter("searchAdProfile");
         }
-        if (request.getParameter("locale") != null) {
-            session.setAttribute("locale", request.getParameter("locale"));
-        }
+
+
         ServiceProvider provider = ServiceProvider.getInstance();
         AdInfoService adInfoService = provider.getAdInfoService();
         ClothesTypeService clothesTypeService = provider.getClothesTypeService();
 
         try {
-            List<AdInfo> adInfoList = adInfoService.getAll();
+            List<AdInfo> searchAdsList = adInfoService.searchAds(searchRequest, flag, user);
             List<ClothesType> clothesTypeList = clothesTypeService.getAll();
-            session.setAttribute("adsList", adInfoList);
+            if (flag) {
+                session.setAttribute("searchAdsList", searchAdsList);
+            } else {
+                session.setAttribute("userAdsProfileList", searchAdsList);
+            }
             session.setAttribute("categoryCountList", clothesTypeList);
-            session.removeAttribute("searchAdsList");
-            session.removeAttribute("searchAd");
+            session.setAttribute("searchAd", searchRequest);
+            session.removeAttribute("adsList");
             session.removeAttribute("filterClothesType");
             session.removeAttribute("filterAdsList");
         } catch (ServiceException e) {
             userLogger.error(e);
         }
-
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
+        RequestDispatcher requestDispatcher;
+        if (flag) {
+            requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/home.jsp");
+        } else {
+            requestDispatcher = request.getRequestDispatcher("/WEB-INF/jsp/userProfile.jsp");
+        }
         requestDispatcher.forward(request, response);
     }
 }

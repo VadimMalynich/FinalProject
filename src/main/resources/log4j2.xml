@@ -102,6 +102,24 @@
                 additivity="true">
             <AppenderRef ref="TxtFile"/>
         </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.SearchAds" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.impl.FilterAdsByType" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+        <Logger name="by.training.finalproject.controller.command.CommandProvider" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+
+        <Logger name="by.training.finalproject.controller.filter.SecurityFilter" level="all"
+                additivity="true">
+            <AppenderRef ref="TxtFile"/>
+        </Logger>
+
         <Logger name="main.Main" level="all"
                 additivity="true">
             <AppenderRef ref="TxtFile"/>

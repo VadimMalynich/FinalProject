@@ -36,7 +36,7 @@ public interface UserService {
     /**
      * Method for validating data before edit user in database
      *
-     * @param user new info about user
+     * @param user       new info about user
      * @param messengers messengers selected by the user
      * @throws ServiceException when the error occurred on the dao layer or when validate data
      */
@@ -46,10 +46,10 @@ public interface UserService {
     /**
      * Method for validating data before edit user in database
      *
-     * @param user new info about user
+     * @param user       new info about user
      * @param messengers messengers selected by the user
-     * @param oldPass password from the database
-     * @param newPass password for re-write password in database
+     * @param oldPass    password from the database
+     * @param newPass    password for re-write password in database
      * @throws ServiceException when the error occurred on the dao layer or when validate data
      */
     void edit(User user, String[] messengers, String oldPass, String newPass) throws ServiceException;
