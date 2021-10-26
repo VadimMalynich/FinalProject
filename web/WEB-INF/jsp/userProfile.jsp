@@ -24,12 +24,6 @@
 
     <fmt:message bundle="${loc}" key="label.welcome" var="welcome"/>
     <fmt:message bundle="${loc}" key="label.userAds" var="userAds"/>
-    <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst"/>
-    <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond"/>
-    <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird"/>
-    <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst"/>
-    <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond"/>
-    <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird"/>
 
     <fmt:message bundle="${loc}" key="search.input.placeholder" var="searchPlaceholder"/>
 
@@ -174,7 +168,7 @@
                                 </a>
                             </div>
                             <ul class="tags">
-                                <li>${userAd.ad.date}</li>
+                                <li><fmt:formatDate value="${userAd.ad.date}" type="date"/></li>
                             </ul>
                             <a href="Controller?command=go_to_ad_page&adIdInfo=${userAd.id}">
                                 <h2>
@@ -188,39 +182,57 @@
                                 <div class="user-details row align-items-center">
                                     <div class="comment-wrap col-lg-6">
                                         <ul>
+                                            <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
+                                                <fmt:param value="${userAd.commentsCount}"/>
+                                            </fmt:message>
+                                            <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
+                                                <fmt:param value="${userAd.commentsCount}"/>
+                                            </fmt:message>
+                                            <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
+                                                <fmt:param value="${userAd.commentsCount}"/>
+                                            </fmt:message>
+                                            <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
+                                                <fmt:param value="${userAd.likesCount}"/>
+                                            </fmt:message>
+                                            <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
+                                                <fmt:param value="${userAd.likesCount}"/>
+                                            </fmt:message>
+                                            <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
+                                                <fmt:param value="${userAd.likesCount}"/>
+                                            </fmt:message>
                                             <c:choose>
-                                                <c:when test="${userAd.likesCount == 0 || userAd.likesCount > 4}">
-                                                    <li>
-                                                        <em class="icon-heart-empty"></em> ${userAd.likesCount} ${likesFirst}
-                                                    </li>
-                                                </c:when>
                                                 <c:when test="${userAd.likesCount == 1}">
                                                     <li>
-                                                        <em class="icon-heart-empty"></em> ${userAd.likesCount} ${likesSecond}
+                                                        <em class="icon-heart-empty"></em>${likesSecond}
                                                     </li>
                                                 </c:when>
                                                 <c:when test="${userAd.likesCount >= 2 && userAd.likesCount <= 4}">
                                                     <li>
-                                                        <em class="icon-heart-empty"></em> ${userAd.likesCount} ${likesThird}
+                                                        <em class="icon-heart-empty"></em>${likesThird}
                                                     </li>
                                                 </c:when>
+                                                <c:otherwise>
+                                                    <li>
+                                                        <em class="icon-heart-empty"></em>${likesFirst}
+                                                    </li>
+                                                </c:otherwise>
                                             </c:choose>
                                             <c:choose>
-                                                <c:when test="${userAd.commentsCount == 0 || userAd.commentsCount > 4}">
-                                                    <li>
-                                                        <em class="icon-comment"></em>${userAd.commentsCount} ${commentsFirst}
-                                                    </li>
-                                                </c:when>
                                                 <c:when test="${userAd.commentsCount == 1}">
                                                     <li>
-                                                        <em class="icon-comment"></em> ${userAd.commentsCount} ${commentsSecond}
+                                                        <em class="icon-comment"></em>${commentsSecond}
                                                     </li>
                                                 </c:when>
                                                 <c:when test="${userAd.commentsCount >= 2 && userAd.commentsCount <= 4}">
                                                     <li>
-                                                        <em class="icon-comment"></em> ${userAd.commentsCount} ${commentsThird}
+                                                        <em class="icon-comment"></em>${commentsThird}
                                                     </li>
                                                 </c:when>
+                                                <c:otherwise>
+                                                    <li>
+                                                        <em class="icon-comment"></em>${commentsFirst}
+                                                    </li>
+                                                </c:otherwise>
                                             </c:choose>
                                         </ul>
                                     </div>

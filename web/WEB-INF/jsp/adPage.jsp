@@ -37,12 +37,24 @@
     <fmt:message bundle="${loc}" key="label.size" var="sizeLabel"/>
     <fmt:message bundle="${loc}" key="label.sex" var="sexLabel"/>
     <fmt:message bundle="${loc}" key="label.description" var="descriptionLabel"/>
-    <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst"/>
-    <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond"/>
-    <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird"/>
-    <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst"/>
-    <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond"/>
-    <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird"/>
+    <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
+        <fmt:param value="${sessionScope.adPageInfo.commentsCount}"/>
+    </fmt:message>
+    <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
+        <fmt:param value="${sessionScope.adPageInfo.commentsCount}"/>
+    </fmt:message>
+    <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
+        <fmt:param value="${sessionScope.adPageInfo.commentsCount}"/>
+    </fmt:message>
+    <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
+        <fmt:param value="${sessionScope.adPageInfo.likesCount}"/>
+    </fmt:message>
+    <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
+        <fmt:param value="${sessionScope.adPageInfo.likesCount}"/>
+    </fmt:message>
+    <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
+        <fmt:param value="${sessionScope.adPageInfo.likesCount}"/>
+    </fmt:message>
     <fmt:message bundle="${loc}" key="label.messengersInfo" var="messengersInfo"/>
     <fmt:message bundle="${loc}" key="label.sex.man" var="sexMan"/>
     <fmt:message bundle="${loc}" key="label.sex.woman" var="sexWoman"/>
@@ -97,14 +109,6 @@
                                 </a>
                             </li>
                             <c:choose>
-                                <c:when test="${sessionScope.user eq null}">
-                                    <li class="menu-btn">
-                                        <a href="Controller?command=go_to_sign_in_page"
-                                           class="template-btn">${signIn}</a>
-                                        <a href="Controller?command=go_to_sign_up_page"
-                                           class="template-btn">${signUp}</a>
-                                    </li>
-                                </c:when>
                                 <c:when test="${sessionScope.user.role.value eq 0}">
                                     <a href="Controller?command=logout" class="template-btn">${logout}</a>
                                 </c:when>
@@ -115,6 +119,14 @@
                                         <a href="Controller?command=logout" class="template-btn">${logout}</a>
                                     </li>
                                 </c:when>
+                                <c:otherwise>
+                                    <li class="menu-btn">
+                                        <a href="Controller?command=go_to_sign_in_page"
+                                           class="template-btn">${signIn}</a>
+                                        <a href="Controller?command=go_to_sign_up_page"
+                                           class="template-btn">${signUp}</a>
+                                    </li>
+                                </c:otherwise>
                             </c:choose>
                         </ul>
                     </div>
@@ -129,9 +141,6 @@
                         <ul>
                             <li class="active"><a href="Controller?command=go_to_home_page">${home}</a></li>
                             <c:choose>
-                                <c:when test="${sessionScope.user eq null}">
-                                    <li><a href="#">FAQ</a></li>
-                                </c:when>
                                 <c:when test="${sessionScope.user.role.value eq 0}">
                                     <li><a href="Controller?command=go_to_types_page">${assortment}</a></li>
                                     <li><a href="Controller?command=go_to_users_page">${usersButton}</a></li>
@@ -141,6 +150,9 @@
                                     <li><a href="Controller?command=go_to_add_ad_page">${addButton}</a></li>
                                     <li><a href="#">FAQ</a></li>
                                 </c:when>
+                                <c:otherwise>
+                                    <li><a href="#">FAQ</a></li>
+                                </c:otherwise>
                             </c:choose>
                             <c:if test="${requestScope.message ne null}">
                                 <li>
@@ -183,7 +195,7 @@
                         <img class="img-fluid" src="<c:url value="${sessionScope.adPageInfo.ad.picture}"/>" alt="">
                         <ul class="tags">
                             <li>
-                                <c:out value="${sessionScope.adPageInfo.ad.date}"/>
+                                <fmt:formatDate value="${sessionScope.adPageInfo.ad.date}" type="date"/>
                             </li>
                         </ul>
                         <h2>
@@ -229,9 +241,6 @@
                                         <div class="post-details">
                                             <H4>
                                                 <c:choose>
-                                                    <c:when test="${sessionScope.adPageInfo.ad.size.value eq 1}">
-                                                        <c:out value="XS"/>
-                                                    </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.ad.size.value eq 2}">
                                                         <c:out value="S"/>
                                                     </c:when>
@@ -250,6 +259,9 @@
                                                     <c:when test="${sessionScope.adPageInfo.ad.size.value eq 7}">
                                                         <c:out value="XXXL"/>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="XS"/>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </H4>
                                         </div>
@@ -265,9 +277,6 @@
                                         <div class="post-details">
                                             <H4>
                                                 <c:choose>
-                                                    <c:when test="${sessionScope.adPageInfo.ad.sex.value eq 0}">
-                                                        <c:out value="${sexMan}"/>
-                                                    </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.ad.sex.value eq 1}">
                                                         <c:out value="${sexWoman}"/>
                                                     </c:when>
@@ -277,6 +286,9 @@
                                                     <c:when test="${sessionScope.adPageInfo.ad.sex.value eq 3}">
                                                         <c:out value="${sexChild}"/>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${sexMan}"/>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </H4>
                                         </div>
@@ -297,71 +309,71 @@
                                         <c:choose>
                                             <c:when test="${sessionScope.user eq null}">
                                                 <c:choose>
-                                                    <c:when test="${sessionScope.adPageInfo.likesCount == 0 || sessionScope.adPageInfo.likesCount > 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em> ${sessionScope.adPageInfo.likesCount} ${likesFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.likesCount == 1}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${sessionScope.adPageInfo.likesCount} ${likesSecond}
+                                                            <em class="icon-heart-empty"></em>${likesSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.likesCount >= 2 && sessionScope.adPageInfo.likesCount <= 4}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${sessionScope.adPageInfo.likesCount} ${likesThird}
+                                                            <em class="icon-heart-empty"></em>${likesThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em>${likesFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </c:when>
                                             <c:when test="${sessionScope.isLike eq true}">
                                                 <c:choose>
-                                                    <c:when test="${sessionScope.adPageInfo.likesCount == 0 || sessionScope.adPageInfo.likesCount > 4}">
-                                                        <li>
-                                                            <a href="Controller?command=like_ad">
-                                                                <em class="icon-heart"></em> ${sessionScope.adPageInfo.likesCount} ${likesFirst}
-                                                            </a>
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.likesCount == 1}">
                                                         <li>
                                                             <a href="Controller?command=like_ad">
-                                                                <em class="icon-heart"></em> ${sessionScope.adPageInfo.likesCount} ${likesSecond}
+                                                                <em class="icon-heart"></em>${likesSecond}
                                                             </a>
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.likesCount >= 2 && sessionScope.adPageInfo.likesCount <= 4}">
                                                         <li>
                                                             <a href="Controller?command=like_ad">
-                                                                <em class="icon-heart"></em> ${sessionScope.adPageInfo.likesCount} ${likesThird}
+                                                                <em class="icon-heart"></em>${likesThird}
                                                             </a>
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <a href="Controller?command=like_ad">
+                                                                <em class="icon-heart"></em>${likesFirst}
+                                                            </a>
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </c:when>
                                             <c:when test="${sessionScope.isLike eq false}">
                                                 <c:choose>
-                                                    <c:when test="${sessionScope.adPageInfo.likesCount == 0 || sessionScope.adPageInfo.likesCount > 4}">
-                                                        <li>
-                                                            <a href="Controller?command=like_ad">
-                                                                <em class="icon-heart-empty"></em> ${sessionScope.adPageInfo.likesCount} ${likesFirst}
-                                                            </a>
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.likesCount == 1}">
                                                         <li>
                                                             <a href="Controller?command=like_ad">
-                                                                <em class="icon-heart-empty"></em> ${sessionScope.adPageInfo.likesCount} ${likesSecond}
+                                                                <em class="icon-heart-empty"></em>${likesSecond}
                                                             </a>
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${sessionScope.adPageInfo.likesCount >= 2 && sessionScope.adPageInfo.likesCount <= 4}">
                                                         <li>
                                                             <a href="Controller?command=like_ad">
-                                                                <em class="icon-heart-empty"></em> ${sessionScope.adPageInfo.likesCount} ${likesThird}
+                                                                <em class="icon-heart-empty"></em>${likesThird}
                                                             </a>
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <a href="Controller?command=like_ad">
+                                                                <em class="icon-heart-empty"></em>${likesFirst}
+                                                            </a>
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </c:when>
                                         </c:choose>
@@ -375,21 +387,21 @@
                             <div class="container">
                                 <div class="row flex-column">
                                     <c:choose>
-                                        <c:when test="${sessionScope.adPageInfo.commentsCount == 0 || sessionScope.adPageInfo.commentsCount > 4}">
-                                            <h5 class="text-uppercase pb-80">
-                                                <em class="icon-comment"></em> ${sessionScope.adPageInfo.commentsCount} ${commentsFirst}
-                                            </h5>
-                                        </c:when>
                                         <c:when test="${sessionScope.adPageInfo.commentsCount == 1}">
                                             <h5 class="text-uppercase pb-80">
-                                                <em class="icon-comment"></em> ${sessionScope.adPageInfo.commentsCount} ${commentsSecond}
+                                                <em class="icon-comment"></em>${commentsSecond}
                                             </h5>
                                         </c:when>
                                         <c:when test="${sessionScope.adPageInfo.commentsCount >= 2 && sessionScope.adPageInfo.commentsCount <= 4}">
                                             <h5 class="text-uppercase pb-80">
-                                                <em class="icon-comment"></em> ${sessionScope.adPageInfo.commentsCount} ${commentsThird}
+                                                <em class="icon-comment"></em>${commentsThird}
                                             </h5>
                                         </c:when>
+                                        <c:otherwise>
+                                            <h5 class="text-uppercase pb-80">
+                                                <em class="icon-comment"></em>${commentsFirst}
+                                            </h5>
+                                        </c:otherwise>
                                     </c:choose>
                                     <br>
                                     <c:if test="${empty sessionScope.commentsList}">
@@ -407,7 +419,9 @@
                                                     </div>
                                                     <div class="desc">
                                                         <h5>${comment.user.login}</h5>
-                                                        <p class="date">${comment.commentDate}</p>
+                                                        <p class="date">
+                                                            <fmt:formatDate value="${comment.commentDate}" type="both"/>
+                                                        </p>
                                                         <p class="comment">
                                                             <c:out value="${comment.commentText}"/>
                                                         </p>

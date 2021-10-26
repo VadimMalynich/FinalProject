@@ -33,8 +33,7 @@ public class AdValidator {
         if (material == null || EMPTY_STRING.equals(material)) {
             return false;
         }
-        return material.length() <= 50;
-//        return material.matches(MATERIAL_REGEX);
+        return material.matches(MATERIAL_REGEX);
     }
 
     /**

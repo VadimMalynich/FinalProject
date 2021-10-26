@@ -73,9 +73,6 @@ public class SecurityFilter implements Filter {
             User user = (User) session.getAttribute("user");
             boolean flag = false;
             String command = request.getParameter("command");
-            if (command == null) {
-                chain.doFilter(request, response);
-            }
             if (user == null && !commonCommands.contains(getCommand(command)) && !guestCommands.contains(getCommand(command))) {
                 userLogger.debug("Denied guest access");
                 flag = true;

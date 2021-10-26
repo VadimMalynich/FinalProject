@@ -28,12 +28,6 @@
     <fmt:message bundle="${loc}" key="home.button" var="home"/>
 
     <fmt:message bundle="${loc}" key="label.clothesTypes" var="types"/>
-    <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst"/>
-    <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond"/>
-    <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird"/>
-    <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst"/>
-    <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond"/>
-    <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird"/>
 
     <fmt:message bundle="${loc}" key="search.input.placeholder" var="searchPlaceholder"/>
 
@@ -211,7 +205,7 @@
                                 </c:choose>
                                 <ul class="tags">
                                     <li>
-                                        <c:out value="${ad.ad.date}"/>
+                                        <fmt:formatDate value="${ad.ad.date}" type="date"/>
                                     </li>
                                 </ul>
                                 <a href="Controller?command=go_to_ad_page&adIdInfo=${ad.id}">
@@ -226,39 +220,57 @@
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
+                                                <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
+                                                    <fmt:param value="${ad.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
+                                                    <fmt:param value="${ad.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
+                                                    <fmt:param value="${ad.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
+                                                    <fmt:param value="${ad.likesCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
+                                                    <fmt:param value="${ad.likesCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
+                                                    <fmt:param value="${ad.likesCount}"/>
+                                                </fmt:message>
                                                 <c:choose>
-                                                    <c:when test="${ad.likesCount == 0 || ad.likesCount > 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em> ${ad.likesCount} ${likesFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${ad.likesCount == 1}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${ad.likesCount} ${likesSecond}
+                                                            <em class="icon-heart-empty"></em>${likesSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${ad.likesCount >= 2 && ad.likesCount <= 4}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${ad.likesCount} ${likesThird}
+                                                            <em class="icon-heart-empty"></em>${likesThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em>${likesFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                                 <c:choose>
-                                                    <c:when test="${ad.commentsCount == 0 || ad.commentsCount > 4}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${ad.commentsCount} ${commentsFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${ad.commentsCount == 1}">
                                                         <li>
-                                                            <em class="icon-comment"></em> ${ad.commentsCount} ${commentsSecond}
+                                                            <em class="icon-comment"></em>${commentsSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${ad.commentsCount >= 2 && ad.commentsCount <= 4}">
                                                         <li>
-                                                            <em class="icon-comment"></em> ${ad.commentsCount} ${commentsThird}
+                                                            <em class="icon-comment"></em>${commentsThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-comment"></em>${commentsFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </ul>
                                         </div>
@@ -321,13 +333,13 @@
                                             </a>
                                         </div>
                                     </c:when>
-                                    <c:when test="${sessionScope.user.role.value eq 1 or sessionScope.user == null}">
+                                    <c:otherwise>
                                         <img class="img-fluid" src="<c:url value="${filterAd.ad.picture}"/>" alt="">
-                                    </c:when>
+                                    </c:otherwise>
                                 </c:choose>
                                 <ul class="tags">
                                     <li>
-                                        <c:out value="${filterAd.ad.date}"/>
+                                        <fmt:formatDate value="${filterAd.ad.date}" type="date"/>
                                     </li>
                                 </ul>
                                 <a href="Controller?command=go_to_ad_page&adIdInfo=${filterAd.id}">
@@ -342,39 +354,57 @@
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
+                                                <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
+                                                    <fmt:param value="${filterAd.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
+                                                    <fmt:param value="${filterAd.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
+                                                    <fmt:param value="${filterAd.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
+                                                    <fmt:param value="${filterAd.likesCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
+                                                    <fmt:param value="${filterAd.likesCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
+                                                    <fmt:param value="${filterAd.likesCount}"/>
+                                                </fmt:message>
                                                 <c:choose>
-                                                    <c:when test="${filterAd.likesCount == 0 || filterAd.likesCount > 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em> ${filterAd.likesCount} ${likesFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${filterAd.likesCount == 1}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${filterAd.likesCount} ${likesSecond}
+                                                            <em class="icon-heart-empty"></em>${likesSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${filterAd.likesCount >= 2 && filterAd.likesCount <= 4}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${filterAd.likesCount} ${likesThird}
+                                                            <em class="icon-heart-empty"></em>${likesThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em>${likesFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                                 <c:choose>
-                                                    <c:when test="${filterAd.commentsCount == 0 || filterAd.commentsCount > 4}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${filterAd.commentsCount} ${commentsFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${filterAd.commentsCount == 1}">
                                                         <li>
-                                                            <em class="icon-comment"></em> ${filterAd.commentsCount} ${commentsSecond}
+                                                            <em class="icon-comment"></em>${commentsSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${filterAd.commentsCount >= 2 && filterAd.commentsCount <= 4}">
                                                         <li>
-                                                            <em class="icon-comment"></em> ${filterAd.commentsCount} ${commentsThird}
+                                                            <em class="icon-comment"></em>${commentsThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-comment"></em>${commentsFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </ul>
                                         </div>
@@ -437,13 +467,13 @@
                                             </a>
                                         </div>
                                     </c:when>
-                                    <c:when test="${sessionScope.user.role.value eq 1 or sessionScope.user == null}">
+                                    <c:otherwise>
                                         <img class="img-fluid" src="<c:url value="${searchAd.ad.picture}"/>" alt="">
-                                    </c:when>
+                                    </c:otherwise>
                                 </c:choose>
                                 <ul class="tags">
                                     <li>
-                                        <c:out value="${searchAd.ad.date}"/>
+                                        <fmt:formatDate value="${searchAd.ad.date}" type="date"/>
                                     </li>
                                 </ul>
                                 <a href="Controller?command=go_to_ad_page&adIdInfo=${searchAd.id}">
@@ -458,39 +488,57 @@
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
+                                                <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
+                                                    <fmt:param value="${searchAd.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
+                                                    <fmt:param value="${searchAd.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
+                                                    <fmt:param value="${searchAd.commentsCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
+                                                    <fmt:param value="${searchAd.likesCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
+                                                    <fmt:param value="${searchAd.likesCount}"/>
+                                                </fmt:message>
+                                                <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
+                                                    <fmt:param value="${searchAd.likesCount}"/>
+                                                </fmt:message>
                                                 <c:choose>
-                                                    <c:when test="${searchAd.likesCount == 0 || searchAd.likesCount > 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em> ${searchAd.likesCount} ${likesFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${searchAd.likesCount == 1}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${searchAd.likesCount} ${likesSecond}
+                                                            <em class="icon-heart-empty"></em>${likesSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${searchAd.likesCount >= 2 && searchAd.likesCount <= 4}">
                                                         <li>
-                                                            <em class="icon-heart-empty"></em> ${searchAd.likesCount} ${likesThird}
+                                                            <em class="icon-heart-empty"></em>${likesThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-heart-empty"></em>${likesFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                                 <c:choose>
-                                                    <c:when test="${searchAd.commentsCount == 0 || searchAd.commentsCount > 4}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${searchAd.commentsCount} ${commentsFirst}
-                                                        </li>
-                                                    </c:when>
                                                     <c:when test="${searchAd.commentsCount == 1}">
                                                         <li>
-                                                            <em class="icon-comment"></em> ${searchAd.commentsCount} ${commentsSecond}
+                                                            <em class="icon-comment"></em>${commentsSecond}
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${searchAd.commentsCount >= 2 && searchAd.commentsCount <= 4}">
                                                         <li>
-                                                            <em class="icon-comment"></em> ${searchAd.commentsCount} ${commentsThird}
+                                                            <em class="icon-comment"></em>${commentsThird}
                                                         </li>
                                                     </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <em class="icon-comment"></em>${commentsFirst}
+                                                        </li>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </ul>
                                         </div>

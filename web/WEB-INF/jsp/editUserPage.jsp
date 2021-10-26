@@ -313,11 +313,11 @@
                                                            name="editMessengers[]"
                                                            value="telegram" checked>
                                                 </c:when>
-                                                <c:when test="${!sessionScope.editUser.messengers.isTelegram()}">
+                                                <c:otherwise>
                                                     <input type="checkbox" id="default-checkbox1"
                                                            name="editMessengers[]"
                                                            value="telegram">
-                                                </c:when>
+                                                </c:otherwise>
                                             </c:choose>
                                             <label for="default-checkbox1"></label>
                                         </div>
@@ -335,11 +335,11 @@
                                                            name="editMessengers[]"
                                                            value="viber" checked>
                                                 </c:when>
-                                                <c:when test="${!sessionScope.editUser.messengers.isViber()}">
+                                                <c:otherwise>
                                                     <input type="checkbox" id="default-checkbox2"
                                                            name="editMessengers[]"
                                                            value="viber">
-                                                </c:when>
+                                                </c:otherwise>
                                             </c:choose>
                                             <label for="default-checkbox2"></label>
                                         </div>
@@ -357,11 +357,11 @@
                                                            name="editMessengers[]"
                                                            value="whatsapp" checked>
                                                 </c:when>
-                                                <c:when test="${!sessionScope.editUser.messengers.isWhatsapp()}">
+                                                <c:otherwise>
                                                     <input type="checkbox" id="default-checkbox3"
                                                            name="editMessengers[]"
                                                            value="whatsapp">
-                                                </c:when>
+                                                </c:otherwise>
                                             </c:choose>
                                             <label for="default-checkbox3"></label>
                                         </div>
@@ -374,14 +374,6 @@
                                     <div class="form-select" id="default-select">
                                         <select name="region" id="region" class="nice-select list">
                                             <c:choose>
-                                                <c:when test="${sessionScope.editUser.city.region.value eq 1}">
-                                                    <option value="1" selected>${brest}</option>
-                                                    <option value="2">${vitebsk}</option>
-                                                    <option value="3">${gomel}</option>
-                                                    <option value="4">${grodno}</option>
-                                                    <option value="5">${minsk}</option>
-                                                    <option value="6">${mogilev}</option>
-                                                </c:when>
                                                 <c:when test="${sessionScope.editUser.city.region.value eq 2}">
                                                     <option value="1">${brest}</option>
                                                     <option value="2" selected>${vitebsk}</option>
@@ -422,6 +414,14 @@
                                                     <option value="5">${minsk}</option>
                                                     <option value="6" selected>${mogilev}</option>
                                                 </c:when>
+                                                <c:otherwise>
+                                                    <option value="1" selected>${brest}</option>
+                                                    <option value="2">${vitebsk}</option>
+                                                    <option value="3">${gomel}</option>
+                                                    <option value="4">${grodno}</option>
+                                                    <option value="5">${minsk}</option>
+                                                    <option value="6">${mogilev}</option>
+                                                </c:otherwise>
                                             </c:choose>
                                         </select>
                                     </div>
@@ -438,9 +438,9 @@
                                                         <option value="${city.id}" class="option"
                                                                 selected>${city.name}</option>
                                                     </c:when>
-                                                    <c:when test="${sessionScope.editUser.city.id ne city.id}">
+                                                    <c:otherwise>
                                                         <option value="${city.id}" class="option">${city.name}</option>
-                                                    </c:when>
+                                                    </c:otherwise>
                                                 </c:choose>
                                             </c:forEach>
                                         </select>

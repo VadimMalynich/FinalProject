@@ -19,7 +19,9 @@
 
     <fmt:message bundle="${loc}" key="logout.button" var="logout"/>
     <fmt:message bundle="${loc}" key="profile.button" var="profile"/>
+    <fmt:message bundle="${loc}" key="assortment.button" var="assortment"/>
     <fmt:message bundle="${loc}" key="home.button" var="home"/>
+    <fmt:message bundle="${loc}" key="users.button" var="usersButton"/>
     <fmt:message bundle="${loc}" key="add.ad.button" var="addAdButton"/>
     <fmt:message bundle="${loc}" key="edit.ad.button" var="editAdButton"/>
 
@@ -59,7 +61,7 @@
             <div class="row">
                 <div class="col-lg-2">
                     <div class="logo-area">
-                        <a href="Controller?command=gotoindexpage">
+                        <a href="Controller?command=go_to_home_page">
                             <img src="<c:url value="/resources/images/logo-light.png"/>"
                                  alt="logo">
                         </a>
@@ -102,7 +104,7 @@
                             </c:choose>
                         </ul>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-7">
                         <div class="custom-navbar">
                             <span></span>
                             <span></span>
@@ -113,6 +115,8 @@
                                 <li class="active"><a href="Controller?command=go_to_home_page">${home}</a></li>
                                 <c:choose>
                                     <c:when test="${sessionScope.user.role.value eq 0}">
+                                        <li><a href="Controller?command=go_to_types_page">${assortment}</a></li>
+                                        <li><a href="Controller?command=go_to_users_page">${usersButton}</a></li>
                                         <li><a href="#">FAQ</a></li>
                                     </c:when>
                                     <c:when test="${sessionScope.user.role.value eq 1}">
@@ -212,12 +216,14 @@
                             <div class="form-select" id="default-select">
                                 <select name="editType">
                                     <c:forEach var="type" items="${sessionScope.clothesTypeList}">
-                                        <c:if test="${type.id==sessionScope.editAd.categoryInfo.id}">
-                                            <option value="${type.id}" selected>${type.category}</option>
-                                        </c:if>
-                                        <c:if test="${type.id!=sessionScope.editAd.categoryInfo.id}">
-                                            <option value="${type.id}">${type.category}</option>
-                                        </c:if>
+                                        <c:choose>
+                                            <c:when test="${type.id==sessionScope.editAd.categoryInfo.id}">
+                                                <option value="${type.id}" selected>${type.category}</option>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="${type.id}">${type.category}</option>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -363,6 +369,8 @@
 
 <!-- Footer Area -->
 <c:import url="parts/footer.jsp"/>
+
+<script src="<c:url value="/resources/js/vendor/jquery.nice-select.min.js"/>"></script>
 
 </body>
 </html>

@@ -47,10 +47,11 @@ public class CommandProvider {
     public Command takeCommand(String name) {
         CommandName commandName;
         Command command;
-        try{
+
+        try {
             commandName = CommandName.valueOf(name.toUpperCase());
             command = commands.get(commandName);
-        }catch (IllegalArgumentException | NullPointerException e){
+        } catch (IllegalArgumentException | NullPointerException e) {
             String errorMessage = "Wrong command: " + name;
             userLogger.debug(errorMessage);
             command = commands.get(CommandName.WRONG_REQUEST);

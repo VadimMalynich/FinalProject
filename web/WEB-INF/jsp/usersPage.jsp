@@ -160,9 +160,9 @@
                                 <c:when test="${user.role.value eq 0}">
                                     <div class="visit">${adminLabel}</div>
                                 </c:when>
-                                <c:when test="${user.role.value eq 1}">
+                                <c:otherwise>
                                     <div class="visit">${userLabel}</div>
-                                </c:when>
+                                </c:otherwise>
                             </c:choose>
                             <div class="visit">${user.city.name}</div>
                             <div class="visit">
@@ -187,7 +187,7 @@
                                     <input type="hidden" name="deleteUserId" value="${user.id}">
                                     <div class="serial">
                                         <button type="submit">
-                                            <em class="fa fa-close fa-2x"></em></a>
+                                            <em class="fa fa-close fa-2x"></em>
                                         </button>
                                     </div>
                                 </form>

@@ -7,7 +7,5 @@ import java.io.File;
 import java.io.IOException;
 
 public interface Command {
-	
-	void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException;
-
+    void execute(HttpServletRequest request, HttpServletResponse response, File uploadFilePath) throws ServletException, IOException;
 }

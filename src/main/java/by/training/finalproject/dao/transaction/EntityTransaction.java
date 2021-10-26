@@ -22,7 +22,7 @@ public class EntityTransaction implements Transaction {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-        for (AbstractDao daoElement : daos) {
+        for (AbstractDao<?, ?> daoElement : daos) {
             daoElement.setConnection(connection);
         }
     }

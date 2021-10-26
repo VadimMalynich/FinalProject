@@ -1,8 +1,6 @@
 package by.training.finalproject.controller.command.impl;
 
 import by.training.finalproject.controller.command.Command;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

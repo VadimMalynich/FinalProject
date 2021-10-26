@@ -260,5 +260,8 @@
 
 <!-- Footer Area -->
 <c:import url="parts/footer.jsp"/>
+
+<script src="<c:url value="/resources/js/vendor/jquery.nice-select.min.js"/>"></script>
+
 </body>
 </html>
