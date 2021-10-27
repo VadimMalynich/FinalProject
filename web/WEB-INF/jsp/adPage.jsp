@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -308,23 +309,7 @@
                                     <ul>
                                         <c:choose>
                                             <c:when test="${sessionScope.user eq null}">
-                                                <c:choose>
-                                                    <c:when test="${sessionScope.adPageInfo.likesCount == 1}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${sessionScope.adPageInfo.likesCount >= 2 && sessionScope.adPageInfo.likesCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <ctg:likes-label likesCount="${sessionScope.adPageInfo.likesCount}" bundle="${sessionScope.locale}"/>
                                             </c:when>
                                             <c:when test="${sessionScope.isLike eq true}">
                                                 <c:choose>

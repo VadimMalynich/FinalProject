@@ -16,7 +16,7 @@ public class ContextListener implements ServletContextListener {
         try {
             ConnectionPool.getInstance().init();
         } catch (ConnectionPoolException e) {
-            userLogger.error("Error in ConnectionPool.init", e);
+            userLogger.fatal("Error in ConnectionPool.init", e);
         }
     }
 

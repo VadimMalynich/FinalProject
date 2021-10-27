@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ctg" uri="customtags" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,8 +34,12 @@
 
     <fmt:message bundle="${loc}" key="page.home" var="pageTitle"/>
 
-    <fmt:message bundle="${loc}" key="message.searchResults" var="searchResults"/>
-    <fmt:message bundle="${loc}" key="message.clothesType" var="clothesTypeMessage"/>
+    <fmt:message bundle="${loc}" key="message.searchResults" var="searchResults">
+        <fmt:param value="${sessionScope.searchAd}"/>
+    </fmt:message>
+    <fmt:message bundle="${loc}" key="message.clothesType" var="clothesTypeMessage">
+        <fmt:param value="${sessionScope.filterClothesType}"/>
+    </fmt:message>
     <fmt:message bundle="${loc}" key="message.emptyAds" var="emptyAds"/>
     <fmt:message bundle="${loc}" key="message.emptyAds.continue" var="emptyAdsContinue"/>
     <c:if test="${requestScope.message ne null}">
@@ -156,10 +161,10 @@
             <div class="col-md-6 offset-md-3">
                 <c:choose>
                     <c:when test="${sessionScope.filterClothesType ne null}">
-                        <h2>${clothesTypeMessage} "${sessionScope.filterClothesType}"</h2>
+                        <h2>${clothesTypeMessage}</h2>
                     </c:when>
                     <c:when test="${sessionScope.searchAd ne null}">
-                        <h2>${searchResults} ${sessionScope.searchAd}</h2>
+                        <h2>${searchResults}</h2>
                     </c:when>
                     <c:when test="${empty sessionScope.adsList}">
                         <h2>${emptyAds}</h2>
@@ -220,58 +225,8 @@
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
-                                                <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
-                                                    <fmt:param value="${ad.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
-                                                    <fmt:param value="${ad.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
-                                                    <fmt:param value="${ad.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
-                                                    <fmt:param value="${ad.likesCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
-                                                    <fmt:param value="${ad.likesCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
-                                                    <fmt:param value="${ad.likesCount}"/>
-                                                </fmt:message>
-                                                <c:choose>
-                                                    <c:when test="${ad.likesCount == 1}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${ad.likesCount >= 2 && ad.likesCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <c:choose>
-                                                    <c:when test="${ad.commentsCount == 1}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${ad.commentsCount >= 2 && ad.commentsCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <ctg:likes-label likesCount="${ad.likesCount}" bundle="${sessionScope.locale}"/>
+                                                <ctg:comments-label commentsCount="${ad.commentsCount}" bundle="${sessionScope.locale}"/>
                                             </ul>
                                         </div>
                                     </div>
@@ -354,58 +309,8 @@
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
-                                                <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
-                                                    <fmt:param value="${filterAd.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
-                                                    <fmt:param value="${filterAd.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
-                                                    <fmt:param value="${filterAd.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
-                                                    <fmt:param value="${filterAd.likesCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
-                                                    <fmt:param value="${filterAd.likesCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
-                                                    <fmt:param value="${filterAd.likesCount}"/>
-                                                </fmt:message>
-                                                <c:choose>
-                                                    <c:when test="${filterAd.likesCount == 1}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${filterAd.likesCount >= 2 && filterAd.likesCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <c:choose>
-                                                    <c:when test="${filterAd.commentsCount == 1}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${filterAd.commentsCount >= 2 && filterAd.commentsCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <ctg:likes-label likesCount="${filterAd.likesCount}" bundle="${sessionScope.locale}"/>
+                                                <ctg:comments-label commentsCount="${filterAd.commentsCount}" bundle="${sessionScope.locale}"/>
                                             </ul>
                                         </div>
                                     </div>
@@ -488,58 +393,8 @@
                                     <div class="user-details row align-items-center">
                                         <div class="comment-wrap col-lg-6">
                                             <ul>
-                                                <fmt:message bundle="${loc}" key="label.commentsFirst" var="commentsFirst">
-                                                    <fmt:param value="${searchAd.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.commentsSecond" var="commentsSecond">
-                                                    <fmt:param value="${searchAd.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.commentsThird" var="commentsThird">
-                                                    <fmt:param value="${searchAd.commentsCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesFirst" var="likesFirst">
-                                                    <fmt:param value="${searchAd.likesCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesSecond" var="likesSecond">
-                                                    <fmt:param value="${searchAd.likesCount}"/>
-                                                </fmt:message>
-                                                <fmt:message bundle="${loc}" key="label.likesThird" var="likesThird">
-                                                    <fmt:param value="${searchAd.likesCount}"/>
-                                                </fmt:message>
-                                                <c:choose>
-                                                    <c:when test="${searchAd.likesCount == 1}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${searchAd.likesCount >= 2 && searchAd.likesCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-heart-empty"></em>${likesFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <c:choose>
-                                                    <c:when test="${searchAd.commentsCount == 1}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsSecond}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:when test="${searchAd.commentsCount >= 2 && searchAd.commentsCount <= 4}">
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsThird}
-                                                        </li>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <li>
-                                                            <em class="icon-comment"></em>${commentsFirst}
-                                                        </li>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <ctg:likes-label likesCount="${searchAd.likesCount}" bundle="${sessionScope.locale}"/>
+                                                <ctg:comments-label commentsCount="${searchAd.commentsCount}" bundle="${sessionScope.locale}"/>
                                             </ul>
                                         </div>
                                     </div>
