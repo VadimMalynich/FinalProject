@@ -16,3 +16,4 @@
 Субд: MySQL;<br>
 Библиотек и технологий: log4j, JSTL, JSP;<br>
 Шаблонов проектирования: Command, Observer, Singleton, Factory, Controller.<br>
+<br><br>![img.png](img.png)
