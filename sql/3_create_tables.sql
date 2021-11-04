@@ -164,20 +164,6 @@ CREATE TABLE IF NOT EXISTS `likes`
 
 
 -- -----------------------------------------------------
--- Table `support`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `support`
-(
-    `id`            INT          NOT NULL AUTO_INCREMENT,
-    `user_category` VARCHAR(10)  NOT NULL,
-    `user_text`     VARCHAR(500) NOT NULL,
-    CONSTRAINT `PK_id` PRIMARY KEY (`id`)
-)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 1;
-
-
--- -----------------------------------------------------
 -- Table `messengers`
 -- -----------------------------------------------------
 CREATE TABLE `messengers`
