@@ -24,23 +24,23 @@ public class AdInfoServiceImplTest {
     @BeforeTest
     public void init() throws ConnectionPoolException {
         ConnectionPool.getInstance().init();
-        AdInfo adInfo = new AdInfo(1, 3, 3, 0, 1,
-                new Ad(Date.valueOf("2021-07-23"), "Приталеная рубашка", "Рубашка новая. Продаю так как не подошла по размеру.", "/resources/images/adsPhoto/default.png"));
-        result.add(adInfo);
-        adInfo = new AdInfo(2, 3, 1, 2, 3,
-                new Ad(Date.valueOf("2021-08-09"), "Свитер бабушкин", "Бабушка мне связала и вам свяжет", "/resources/images/adsPhoto/default.png"));
-        result.add(adInfo);
-        adInfo = new AdInfo(3, 4, 1, 0, 0,
-                new Ad(Date.valueOf("2021-05-16"), "Худи clown", "Лиметированное худи может оказаться у вас.", "/resources/images/adsPhoto/default.png"));
-        result.add(adInfo);
-        adInfo = new AdInfo(4, 2, 4, 0, 0,
-                new Ad(Date.valueOf("2021-06-29"), "Майка Polo", "Майка новая. Продаю так как не подошла по размеру.", "/resources/images/adsPhoto/default.png"));
-        result.add(adInfo);
-        adInfo = new AdInfo(5, 3, 1, 1, 2,
+        AdInfo adInfo = new AdInfo(5, 3, 1, 1, 2,
                 new Ad(Date.valueOf("2021-08-26"), "Панамка", "Черная панама хорошо защищает от солнца зимой и летом", "/resources/images/adsPhoto/default.png"));
         result.add(adInfo);
         adInfo = new AdInfo(6, 2, 2, 3, 0,
                 new Ad(Date.valueOf("2021-08-15"), "Чёрные брюки", "Молодежные стильные брюки.", "/resources/images/adsPhoto/default.png"));
+        result.add(adInfo);
+        adInfo = new AdInfo(2, 3, 1, 2, 3,
+                new Ad(Date.valueOf("2021-08-09"), "Свитер бабушкин", "Бабушка мне связала и вам свяжет", "/resources/images/adsPhoto/default.png"));
+        result.add(adInfo);
+        adInfo = new AdInfo(1, 3, 3, 0, 1,
+                new Ad(Date.valueOf("2021-07-23"), "Приталеная рубашка", "Рубашка новая. Продаю так как не подошла по размеру.", "/resources/images/adsPhoto/default.png"));
+        result.add(adInfo);
+        adInfo = new AdInfo(4, 2, 4, 0, 0,
+                new Ad(Date.valueOf("2021-06-29"), "Майка Polo", "Майка новая. Продаю так как не подошла по размеру.", "/resources/images/adsPhoto/default.png"));
+        result.add(adInfo);
+        adInfo = new AdInfo(3, 4, 1, 0, 0,
+                new Ad(Date.valueOf("2021-05-16"), "Худи clown", "Лиметированное худи может оказаться у вас.", "/resources/images/adsPhoto/default.png"));
         result.add(adInfo);
 
 

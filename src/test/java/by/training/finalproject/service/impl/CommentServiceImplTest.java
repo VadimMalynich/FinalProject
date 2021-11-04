@@ -33,7 +33,7 @@ public class CommentServiceImplTest {
         comment.getUser().setLogin("admin@gmail.com");
         secondAdCommentsList.add(comment);
         comment = new Comments(3, 6, 4, "Покупал уже. Жена носит с удовольствием", Timestamp.valueOf("2021-08-22 10:08:30"));
-        comment.getUser().setLogin("vadim_malynich@gmail.com");
+        comment.getUser().setLogin("vadim.malynich@gmail.com");
         secondAdCommentsList.add(comment);
         comment = new Comments(5, 6, 2, "Можете посоветовать друзьям.", Timestamp.valueOf("2021-08-24 16:26:10"));
         comment.getUser().setLogin("slowman@yandex.ru");

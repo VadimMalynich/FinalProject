@@ -71,7 +71,6 @@ public class ClothesTypeServiceImplTest {
     @DataProvider(name = "testAddEditClothesCategoryNegativeProvider")
     public Object[][] createDataForTestAddEditCategoryNegative() {
         return new Object[][]{
-                {null},
                 {new ClothesType()},
                 {new ClothesType("")}
         };
@@ -104,13 +103,13 @@ public class ClothesTypeServiceImplTest {
     }
 
     @Test(testName = "Negative scenario of adding clothes category", expectedExceptions = ServiceException.class,
-            expectedExceptionsMessageRegExp = "Can not add new clothes type.", dataProvider = "testAddEditClothesCategoryNegativeProvider")
+            expectedExceptionsMessageRegExp = "Wrong category name", dataProvider = "testAddEditClothesCategoryNegativeProvider")
     public void testAddClothesCategoryNegative(ClothesType type) throws ServiceException {
         service.add(type);
     }
 
     @Test(testName = "Negative scenario of editing clothes category", expectedExceptions = ServiceException.class,
-            expectedExceptionsMessageRegExp = "Can not edit clothes type.", dataProvider = "testAddEditClothesCategoryNegativeProvider")
+            expectedExceptionsMessageRegExp = "Wrong category name", dataProvider = "testAddEditClothesCategoryNegativeProvider")
     public void testEditClothesCategoryNegative(ClothesType type) throws ServiceException {
         service.edit(type);
     }

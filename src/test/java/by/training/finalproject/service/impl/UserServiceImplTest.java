@@ -36,7 +36,7 @@ public class UserServiceImplTest {
         thirdUser = new User(3, "example@mail.ru", "$31$14$kD5S6aQM-ETST189g2HVODDrEnxgcmbrq8s1RREZgD8",
                 "Георгий", "+375332140036", UserRole.USER, new City(54, Region.GRODNO, "Лида"),
                 new Messengers(false, true, false));
-        fourthUser = new User(4, "vadim_malynich@gmail.com", "$31$14$yAHS2sIdUHYlJJV5zDixYywuniTQrfT5q_P4Yh5mhrw",
+        fourthUser = new User(4, "vadim.malynich@gmail.com", "$31$14$yAHS2sIdUHYlJJV5zDixYywuniTQrfT5q_P4Yh5mhrw",
                 "Vadim", "+375336695412", UserRole.USER, new City(54, Region.GRODNO, "Лида"),
                 new Messengers(false, true, true));
         result.add(firstUser);
@@ -59,7 +59,7 @@ public class UserServiceImplTest {
         return new Object[][]{
                 {new String[]{"admin@gmail.com", "123456sS"}, firstUser},
                 {new String[]{"example@mail.ru", "dwe54DSws"}, thirdUser},
-                {new String[]{"vadim_malynich@gmail.com", "wdsad5wd5sWDsda652s"}, fourthUser},
+                {new String[]{"vadim.malynich@gmail.com", "wdsad5wd5sWDsda652s"}, fourthUser},
                 {new String[]{"slowman@yandex.ru", "Abcdef9"}, secondUser}
         };
     }
