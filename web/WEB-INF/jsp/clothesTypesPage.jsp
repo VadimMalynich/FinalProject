@@ -82,7 +82,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <div class="custom-navbar">
                             <span></span>
                             <span></span>
@@ -93,7 +93,7 @@
                                 <li class="active"><a href="Controller?command=go_to_home_page">${home}</a></li>
                                 <li><a href="Controller?command=go_to_types_page">${assortment}</a></li>
                                 <li><a href="Controller?command=go_to_users_page">${usersButton}</a></li>
-                                <li><a href="#">FAQ</a></li>
+<%--                                <li><a href="#">FAQ</a></li>--%>
                             </ul>
                         </div>
                     </div>

@@ -96,7 +96,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-5">
                         <div class="custom-navbar">
                             <span></span>
                             <span></span>
@@ -106,7 +106,7 @@
                             <ul>
                                 <li class="active"><a href="Controller?command=go_to_home_page">${home}</a></li>
                                 <li><a href="Controller?command=go_to_add_ad_page">${addAdButton}</a></li>
-                                <li><a href="#">FAQ</a></li>
+<%--                                <li><a href="#">FAQ</a></li>--%>
                             </ul>
                         </div>
                     </div>

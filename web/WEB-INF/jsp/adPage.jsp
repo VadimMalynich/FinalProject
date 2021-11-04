@@ -145,15 +145,15 @@
                                 <c:when test="${sessionScope.user.role.value eq 0}">
                                     <li><a href="Controller?command=go_to_types_page">${assortment}</a></li>
                                     <li><a href="Controller?command=go_to_users_page">${usersButton}</a></li>
-                                    <li><a href="#">FAQ</a></li>
+<%--                                    <li><a href="#">FAQ</a></li>--%>
                                 </c:when>
                                 <c:when test="${sessionScope.user.role.value eq 1}">
                                     <li><a href="Controller?command=go_to_add_ad_page">${addButton}</a></li>
-                                    <li><a href="#">FAQ</a></li>
+<%--                                    <li><a href="#">FAQ</a></li>--%>
                                 </c:when>
-                                <c:otherwise>
-                                    <li><a href="#">FAQ</a></li>
-                                </c:otherwise>
+<%--                                <c:otherwise>--%>
+<%--                                    <li><a href="#">FAQ</a></li>--%>
+<%--                                </c:otherwise>--%>
                             </c:choose>
                             <c:if test="${requestScope.message ne null}">
                                 <li>
