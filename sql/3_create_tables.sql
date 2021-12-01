@@ -50,10 +50,10 @@ CREATE TABLE IF NOT EXISTS `users`
     `role`     TINYINT      NOT NULL CHECK (`role` IN (0, 1)) DEFAULT 1,
     `city_id`  INT          NOT NULL,
 
-    CONSTRAINT `PK_id, PK_email` PRIMARY KEY (`id`, `email`),
+    CONSTRAINT `PK_id` PRIMARY KEY (`id`),
     UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
     INDEX `city_id_idx` (`city_id` ASC) VISIBLE,
-    CONSTRAINT `city_id`
+    CONSTRAINT `city_id_fk`
         FOREIGN KEY (`city_id`)
             REFERENCES `cities` (`id`)
             ON DELETE NO ACTION
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `ads_info`
       * 6 - XXL (ClothesSize.XXL)
       * 7 - XXXL (ClothesSize.XXXL)
      */
-    `size`        TINYINT   NOT NULL CHECK ( 'size' IN (1,2,3,4,5,6,7) ),
+    `size`        TINYINT   NOT NULL CHECK ( `size` IN (1,2,3,4,5,6,7) ),
     /**
      * 0 - Мужской (ClothesSex.MAN)
      * 1 - Женский (ClothesSex.WOMAN)
@@ -96,12 +96,12 @@ CREATE TABLE IF NOT EXISTS `ads_info`
     CONSTRAINT `PK_id` PRIMARY KEY (`id`),
     INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
     INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
-    CONSTRAINT `category_id`
+    CONSTRAINT `category_id_fk`
         FOREIGN KEY (`category_id`)
             REFERENCES `category` (`id`)
             ON DELETE RESTRICT
             ON UPDATE RESTRICT,
-    CONSTRAINT `user_id`
+    CONSTRAINT `user_id_fk`
         FOREIGN KEY (`user_id`)
             REFERENCES `users` (`id`)
             ON DELETE CASCADE
@@ -124,12 +124,12 @@ CREATE TABLE IF NOT EXISTS `comments`
     CONSTRAINT `PK_id` PRIMARY KEY (`id`),
     INDEX `user_comment_idx` (`user_id` ASC) VISIBLE,
     INDEX `ad_comment_idx` (`ad_info_id` ASC) VISIBLE,
-    CONSTRAINT `ad_comment`
+    CONSTRAINT `ad_comment_fk`
         FOREIGN KEY (`ad_info_id`)
             REFERENCES `ads_info` (`id`)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
-    CONSTRAINT `user_comment`
+    CONSTRAINT `user_comment_fk`
         FOREIGN KEY (`user_id`)
             REFERENCES `users` (`id`)
             ON DELETE CASCADE
@@ -149,18 +149,32 @@ CREATE TABLE IF NOT EXISTS `likes`
     CONSTRAINT `PK_ad_info_id, PK_user_id` PRIMARY KEY (`ad_info_id`, `user_id`),
     CONSTRAINT `UN_ads_users` UNIQUE (`ad_info_id`, `user_id`),
     INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `ad_like`
+    CONSTRAINT `ad_like_fk`
         FOREIGN KEY (`ad_info_id`)
             REFERENCES `ads_info` (`id`)
             ON DELETE CASCADE
             ON UPDATE CASCADE,
-    CONSTRAINT `user_like`
+    CONSTRAINT `user_like_fk`
         FOREIGN KEY (`user_id`)
             REFERENCES `users` (`id`)
             ON DELETE CASCADE
             ON UPDATE CASCADE
 )
     ENGINE = InnoDB;
+
+#
+# -- -----------------------------------------------------
+# -- Table `support`
+# -- -----------------------------------------------------
+# CREATE TABLE IF NOT EXISTS `support`
+# (
+#     `id`            INT          NOT NULL AUTO_INCREMENT,
+#     `user_category` VARCHAR(10)  NOT NULL,
+#     `user_text`     VARCHAR(500) NOT NULL,
+#     CONSTRAINT `PK_id` PRIMARY KEY (`id`)
+# )
+#     ENGINE = InnoDB
+#     AUTO_INCREMENT = 1;
 
 
 -- -----------------------------------------------------
@@ -174,7 +188,7 @@ CREATE TABLE `messengers`
     `whatsapp` BIT NOT NULL DEFAULT 0,
     CONSTRAINT `PK_user_id` PRIMARY KEY (`user_id`),
     UNIQUE INDEX `user_id_UNIQUE` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `id_user`
+    CONSTRAINT `id_user_fk`
         FOREIGN KEY (`user_id`)
             REFERENCES `users` (`id`)
             ON DELETE CASCADE

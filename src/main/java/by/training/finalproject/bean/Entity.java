@@ -1,9 +1,14 @@
 package by.training.finalproject.bean;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@MappedSuperclass
 public abstract class Entity implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     Entity() {

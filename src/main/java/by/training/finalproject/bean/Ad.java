@@ -1,16 +1,35 @@
 package by.training.finalproject.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.Objects;
 
+@Embeddable
 public class Ad implements Serializable {
+    @Column(name = "date", nullable = false)
     private Date date;
+
+    @Column(name = "topic", nullable = false, length = 50)
     private String topic;
+
+    @Column(name = "material", nullable = false, length = 50)
     private String material;
+
+    @Convert(converter = ClothesSizeConverter.class)
+    @Column(name = "size", nullable = false)
     private ClothesSize size;
+
+    @Convert(converter = ClothesSexConverter.class)
+    @Column(name = "sex", nullable = false)
     private ClothesSex sex;
+
+    @Column(name = "description", nullable = false, length = 500)
     private String description;
+
+    @Column(name = "picture", nullable = false, length = 260)
     private String picture;
 
     public Ad() {

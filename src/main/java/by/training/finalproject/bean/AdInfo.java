@@ -1,14 +1,38 @@
 package by.training.finalproject.bean;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
+@javax.persistence.Entity
+@Table(name = "ads_info", schema = "ads_db", catalog = "")
 public class AdInfo extends Entity {
+
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_id_fk"))
     private User userInfo;
+
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "category_id", foreignKey = @ForeignKey(name = "category_id_fk"))
     private ClothesType categoryInfo;
+
+    @Embedded
     private Ad ad;
+
+    @Transient
     private Integer likesCount;
+
+    @Transient
     private Integer commentsCount;
+
+//    @ManyToMany(mappedBy = "adInfoList", fetch = FetchType.LAZY)
+//    private List<User> userList;
 
     public AdInfo() {
     }

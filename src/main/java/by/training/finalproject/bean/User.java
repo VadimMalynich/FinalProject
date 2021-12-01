@@ -1,15 +1,51 @@
 package by.training.finalproject.bean;
 
-import java.util.Objects;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.*;
+
+@javax.persistence.Entity
+@Table(name = "users", schema = "ads_db", catalog = "")
 public class User extends Entity {
+
+    //    @Id
+    @Column(name = "email", nullable = false, length = 254, unique = true)
     private String login;
+
+    @Column(name = "password", nullable = false, length = 50)
     private String password;
+
+    @Column(name = "name", nullable = false, length = 23)
     private String name;
+
+    @Column(name = "phone", nullable = false, length = 13)
     private String phoneNumber;
+
+    @Convert(converter = RoleConverter.class)
+    @Column(name = "role", nullable = false)
     private UserRole role;
+
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JoinColumn(name = "city_id", foreignKey = @ForeignKey(name = "city_id_fk"))
     private City city;
+
+//    @OneToOne(mappedBy = "userMessengers", orphanRemoval = true, cascade = {
+//            CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE
+//    }, fetch = FetchType.EAGER)
+    @Transient
     private Messengers messengers;
+
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "likes",
+//            joinColumns = @JoinColumn(name = "ad_info_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id")
+//    )
+//    private List<AdInfo> adInfoList;
 
     public User() {
     }
@@ -22,6 +58,13 @@ public class User extends Entity {
         super();
         this.login = login;
         this.password = password;
+    }
+
+    public User(Integer id, String name, String phoneNumber, City city) {
+        super(id);
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.city = city;
     }
 
     public User(Integer id, String name, String phoneNumber, City city, Messengers messengers) {
@@ -39,6 +82,16 @@ public class User extends Entity {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    public User(String login, String password, String name, String phoneNumber, UserRole role, Integer city, Messengers messengers) {
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.city = new City(city);
+        this.messengers = messengers;
     }
 
     public User(Integer id, String login, String password, String name, String phoneNumber, UserRole role, City city) {

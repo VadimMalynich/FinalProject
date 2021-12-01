@@ -1,9 +1,19 @@
 package by.training.finalproject.bean;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.Table;
 import java.util.Objects;
 
+@javax.persistence.Entity
+@Table(name = "cities", schema = "ads_db", catalog = "")
 public class City extends Entity {
+
+    @Convert(converter = RegionConverter.class)
+    @Column(name = "region", nullable = false)
     private Region region;
+
+    @Column(name = "city", nullable = false, length = 25)
     private String name;
 
     public City() {

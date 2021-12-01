@@ -1,9 +1,19 @@
 package by.training.finalproject.bean;
 
+
+import javax.persistence.Column;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.Objects;
 
+@javax.persistence.Entity
+@Table(name = "category", schema = "ads_db", catalog = "")
 public class ClothesType extends Entity {
+
+    @Column(name = "name", nullable = false, length = 45)
     private String category;
+
+    @Transient
     private Integer count;
 
     public ClothesType() {
