@@ -1,9 +1,9 @@
 package by.training.finalproject.service;
 
-import by.training.finalproject.service.impl.AdInfoServiceImpl;
-import by.training.finalproject.service.impl.ClothesTypeServiceImpl;
-import by.training.finalproject.service.impl.CommentServiceImpl;
-import by.training.finalproject.service.impl.UserServiceImpl;
+import by.training.finalproject.service.jdbc.AdInfoServiceImpl;
+import by.training.finalproject.service.jdbc.ClothesTypeServiceImpl;
+import by.training.finalproject.service.jdbc.CommentServiceImpl;
+import by.training.finalproject.service.jdbc.UserServiceImpl;
 
 public final class ServiceProvider {
 

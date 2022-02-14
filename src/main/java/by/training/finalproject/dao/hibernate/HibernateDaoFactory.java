@@ -1,46 +1,38 @@
 package by.training.finalproject.dao.hibernate;
 
-
-import by.training.finalproject.dao.hibernate.impl.*;
-
 public class HibernateDaoFactory {
     private static final HibernateDaoFactory instance = new HibernateDaoFactory();
 
     private HibernateDaoFactory() {
     }
 
-    private final HibernateAdDao hibernateAdDao = new HibernateAdDaoImpl();
-    private final HibernateCityDao hibernateCityDao = new HibernateCityDaoImpl();
-    private final HibernateClothesTypeDao hibernateClothesTypeDao = new HibernateClothesTypeDaoImpl();
-    private final HibernateCommentDao hibernateCommentDao = new HibernateCommentDaoImpl();
-    private final HibernateMessengersDao hibernateMessengersDao = new HibernateMessengersDaoImpl();
-    private final HibernateUserDao hibernateUserDao = new HibernateUserDaoImpl();
+    private final AdDao adDao = new AdDao();
+    private final CityDao cityDao = new CityDao();
+    private final ClothesTypeDao clothesTypeDao = new ClothesTypeDao();
+    private final CommentDao commentDao = new CommentDao();
+    private final UserDao userDao = new UserDao();
 
     public static HibernateDaoFactory getInstance() {
         return instance;
     }
 
-    public HibernateAdDao getAdDao() {
-        return hibernateAdDao;
+    public AdDao getAdDao() {
+        return adDao;
     }
 
-    public HibernateCityDao getCityDao() {
-        return hibernateCityDao;
+    public CityDao getCityDao() {
+        return cityDao;
     }
 
-    public HibernateClothesTypeDao getClothesTypeDao() {
-        return hibernateClothesTypeDao;
+    public ClothesTypeDao getClothesTypeDao() {
+        return clothesTypeDao;
     }
 
-    public HibernateCommentDao getCommentDao() {
-        return hibernateCommentDao;
+    public CommentDao getCommentDao() {
+        return commentDao;
     }
 
-    public HibernateMessengersDao getMessengersDao() {
-        return hibernateMessengersDao;
-    }
-
-    public HibernateUserDao getUserDao() {
-        return hibernateUserDao;
+    public UserDao getUserDao() {
+        return userDao;
     }
 }
